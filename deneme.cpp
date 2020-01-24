@@ -4,14 +4,11 @@
 #include <iostream>
 #include "events.h"
 #include "models.h"
+#include "Variables.h"
+#include "Functions.h"
+#include "utility.h"
 
 using namespace std;
-
-#define Line(x1,y1,x2,y2) 	glBegin(GL_LINES);\
-								glVertex2f((x1),(y1));\
-								glVertex2f((x2),(y2));\
-							glEnd();
-
 
 //DRAW--------------------------
 void init(void);
@@ -62,6 +59,16 @@ void init(void){
 void display(void){
 	//clear all pixels
 	glClear(GL_COLOR_BUFFER_BIT);
+	Char character = Char("character",'a');
+	Double double_number = Double("double_number",3.14561234);
+	Float float_number = Float("float_number",1.628);
+	Int integer_number = Int("integer_number",3);
+	std::cout << 1 << endl;
+	std::cout << character << endl;
+	std::cout << double_number << endl;
+	std::cout << float_number << endl;
+	std::cout << integer_number << endl;
+	/*
 	glPushMatrix();
 		//Some settings
 		glTranslatef((GLdouble) Width/2, (GLdouble) Height/2, 0.0);
@@ -172,4 +179,5 @@ void display(void){
 
 	glPopMatrix();
 	glFlush();
+	*/
 }

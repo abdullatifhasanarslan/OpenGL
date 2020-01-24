@@ -1,7 +1,7 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-class Function(){
+class Function{
 	public:
 		Function();
 		~Function();
@@ -9,7 +9,7 @@ class Function(){
 
 	protected:
 
-}
+};
 
 
 #endif
