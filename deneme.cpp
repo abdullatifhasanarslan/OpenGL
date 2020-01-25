@@ -19,11 +19,14 @@ void spinDisplay();
 //VARIABLES---------------------
 int WindowX = 640;
 int WindowY = 360;
-int Width = 640;
+int Width = 1000;
 int Height = 360;
-const char* WindowName = "Spinner";
-extern GLubyte fly[], halftone[];
-
+const char* WindowName = "deneme";
+Variable<char> character("character",'a');
+Variable<double> double_number("double_number",31.4561234);
+Variable<float> float_number("float_number",16.28);
+Variable<int> integer_number("integer_number",30);
+Variable<bool> boolean("boolean",true);
 /*
  *	Request double buffer display mode.
  *	Register mouse input callback functions
@@ -54,23 +57,38 @@ int main(int argc, char** argv){
 void init(void){
 	glClearColor(0.3, 0.3, 0.3, 0.0);
 	glShadeModel(GL_FLAT);
+
+	character.setPose(0*200,0);
+	double_number.setPose(1*200,0);
+	float_number.setPose(2*200,0);
+	integer_number.setPose(3*200,0);
+	boolean.setPose(4*200,0);
+
+	std::cout << character << endl;
+	std::cout << double_number << endl;
+	std::cout << float_number << endl;
+	std::cout << integer_number << endl;
+	std::cout << boolean << endl;
+	Variable<double> test = double_number+double_number;
+	std::cout << test << endl;
 }
 
 void display(void){
 	//clear all pixels
 	glClear(GL_COLOR_BUFFER_BIT);
-	Variable<char> character("character",'a');
-	Variable<double> double_number("double_number",3.14561234);
-	Variable<float> float_number("float_number",1.628);
-	Variable<int> integer_number("integer_number",3);
-	std::cout << 1 << endl;
-	std::cout << character << endl;
-	std::cout << double_number << endl;
-	std::cout << float_number << endl;
-	std::cout << integer_number << endl;
-	Variable<double> test = double_number+double_number;
-	std::cout << test << endl;
+	glPushMatrix();
+		//Some settings
+		glColor3f(0.7, 0.7, 0.0);
+		glLineWidth(20.0);
+		character.display();
+		double_number.display();
+		float_number.display();
+		integer_number.display();
+		boolean.display();
+	glPopMatrix();
+	glFlush();
 	/*
+	glClear(GL_COLOR_BUFFER_BIT);
 	glPushMatrix();
 		//Some settings
 		glTranslatef((GLdouble) Width/2, (GLdouble) Height/2, 0.0);

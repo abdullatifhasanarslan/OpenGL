@@ -11,17 +11,65 @@ class Variable{
 		std::string name;		//remember to make this const
 		Type value;
 		Variable(std::string name, Type value);
+		Variable(const Variable<Type> &object);	//copy constructor
+		void display();
+		void setPose(int x, int y);
+		bool checkCollision(int x, int y);
+		//assignment-----------------------------------------------------------------------------
+		Variable<Type>& operator=(const Variable<Type>& operand);		//simp-assignment:	a=b
+		Variable<Type>& operator+=(const Variable<Type>& operand);		//add-assignment:	a+=b
+		Variable<Type>& operator-=(const Variable<Type>& operand);		//sub-assignment:	a-=b
+		Variable<Type>& operator*=(const Variable<Type>& operand);		//mul-assignment:	a*=b
+		Variable<Type>& operator/=(const Variable<Type>& operand);		//div-assignment:	a/=b
+		Variable<Type>& operator%=(const Variable<Type>& operand);		//mod-assignment:	a%=b
+		Variable<Type>& operator&=(const Variable<Type>& operand);		//AND-assignment:	a&=b
+		Variable<Type>& operator|=(const Variable<Type>& operand);		//OR-assignment:	a|=b
+		Variable<Type>& operator^=(const Variable<Type>& operand);		//XOR-assignent:	a^=b
+		Variable<Type>& operator<<=(const Variable<Type>& operand);		//lsh-assignent:	a<<=b
+		Variable<Type>& operator>>=(const Variable<Type>& operand);		//rsh-assignent:	a>>=b							//pointomemofpoint:	a->*b
+		//logical--------------------------------------------------------------------------------
+		Variable<bool> operator!() const;											//negation:			!a
+		Variable<bool> operator&&(const Variable<Type>& operand) const;			//AND:				a&&b
+		Variable<bool> operator||(const Variable<Type>& operand) const;			//OR:				a||b
+		//comparison-----------------------------------------------------------------------------
+		Variable<bool> operator==(const Variable<Type>& operand) const;	//equal:			a==b
+		Variable<bool> operator!=(const Variable<Type>& operand) const;	//notequal:			a!=b
+		Variable<bool> operator<(const Variable<Type>& operand) const;	//lessthan:			a<b
+		Variable<bool> operator>(const Variable<Type>& operand) const;	//greaterthan:		a>b
+		Variable<bool> operator<=(const Variable<Type>& operand) const;	//lesseqthan:		a<=b
+		Variable<bool> operator>=(const Variable<Type>& operand) const;	//greateqthan:		a>=b
+		//			  operator<=>(const Variable<Type>& operand) const;	//threewaycomp:		a<=>b
+		//arithmetic-----------------------------------------------------------------------------
+		Variable<Type> operator+() const;								//unary plus:		+a
+		Variable<Type> operator-() const;								//unary minus:		-a
+		Variable<Type> operator+(const Variable<Type>& operand) const;	//addition:			a+b
+		Variable<Type> operator-(const Variable<Type>& operand) const;	//subtracion:		a-b
+		Variable<Type> operator*(const Variable<Type>& operand) const;	//multiplication:	a*b
+		Variable<Type> operator/(const Variable<Type>& operand) const;	//division:			a/b
+		Variable<Type> operator%(const Variable<Type>& operand) const;	//modulo:			a%b
+		//increment-decrement--------------------------------------------------------------------
+		Variable<Type> operator++();									//pre-increment:	++a
+		Variable<Type> operator--();									//pre-decrement:	--a
+		//Variable<Type> operator++(int);								//post-increment:	a++
+		//Variable<Type> operator--(int);								//post-decrement:	a--
+		//member access--------------------------------------------------------------------------
+		/*
+		template <class ReType, class InType>
+		Variable<ReType>& operator[](InType index);						//subscript:		a[b]
+		Variable<ReType>& operator*();									//indirection:		*a
+		Variable<ReType>& operator&();									//addressof:		&a
+		Variable<ReType>& operator->();									//memberofpointer:	a->b
+		Variable<ReType>& operator->*();									//post-decrement:	a--
+		*/
 		~Variable();
 		template <class T>
 		friend std::ostream& operator<<(std::ostream& out, const Variable<T>& variable);
-		Variable<Type> operator+(const Variable<Type>& added) const;
 	private:
-
-	protected:
 		//int X, Y;
-		//int x, y;
+		int x, y;
 		//int WIDTH, HEIGHT;
-		//int width, height;
+		int width, height;
+	protected:
 	
 };
 //char character='a';

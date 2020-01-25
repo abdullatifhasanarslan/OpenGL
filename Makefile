@@ -9,8 +9,8 @@ events.o: events.h events.cpp
 utility.o: utility.h utility.cpp
 	g++ utility.h utility.cpp -Wall -Werror -c 
 
-Variables.o: Variables.h Variables.cpp
-	g++ Variables.h Variables.cpp -Wall -Werror -c
+Variables.o: Variables.h Variables.cpp models.h
+	g++ Variables.h Variables.cpp models.h -Wall -Werror -c
 Functions.o: Functions.h Functions.cpp
 	g++ Functions.h Functions.cpp -Wall -Werror -c
 
