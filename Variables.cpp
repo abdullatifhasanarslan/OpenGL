@@ -11,11 +11,11 @@ NameSpace::~NameSpace(){
 
 }
 
-Variable* NameSpace::get_Variable(const std::string name){
+void* NameSpace::get_Variable(const std::string name){
 	return NULL;
 }
 
-void NameSpace::add_Variable(const Variable* const variable){
+void NameSpace::add_Variable(const void* const variable){
 
 }
 
@@ -24,82 +24,22 @@ std::ostream& operator<<(std::ostream& out, const NameSpace& name_space) {
 }
 
 //-----------------------------------------------------------
-Variable::Variable(std::string name){
+template <class Type>
+Variable<Type>::Variable(std::string name, Type value){
 	this->name=name;
-}
-
-Variable::~Variable(){
-
-}
-
-std::ostream& operator<<(std::ostream& out, const Variable& variable) {
-    out << variable.name;
-    return out;
-}
-
-//-----------------------------------------------------------
-Char::Char(std::string name, char value) : Variable(name){
 	this->value=value;
 }
-
-Char::~Char(){
-
-}
-
-std::ostream& operator<<(std::ostream& out, const Char& variable) {
-    out << variable.name << "=" << variable.value;
-    return out;
-}
-
-//-----------------------------------------------------------
-Double::Double(std::string name, double value) : Variable(name){
-	this->value=value;
-}
-
-Double::~Double(){
+template <class Type>
+Variable<Type>::~Variable(){
 
 }
-
-std::ostream& operator<<(std::ostream& out, const Double& variable) {
-    out << variable.name << "=" << variable.value;
-    return out;
-}
-//-----------------------------------------------------------
-Float::Float(std::string name, float value) : Variable(name){
-	this->value=value;
+template <class Type>
+Variable<Type> Variable<Type>::operator+(const Variable<Type>& added) const{
+	return Variable<Type>("NULL",this->value+added.value);
 }
 
-Float::~Float(){
 
-}
-
-std::ostream& operator<<(std::ostream& out, const Float& variable) {
-    out << variable.name << "=" << variable.value;
-    return out;
-}
-//-----------------------------------------------------------
-Int::Int(std::string name, int value) : Variable(name){
-	this->value=value;
-}
-
-Int::~Int(){
-
-}
-
-std::ostream& operator<<(std::ostream& out, const Int& variable) {
-    out << variable.name << "=" << variable.value;
-    return out;
-}
-//-----------------------------------------------------------
-Pointer::Pointer(std::string name, void* value) : Variable(name){
-	this->value=value;
-}
-
-Pointer::~Pointer(){
-
-}
-
-std::ostream& operator<<(std::ostream& out, const Pointer& variable) {
-    out << variable.name << "=" << variable.value;
-    return out;
-}
+template class Variable<char>;
+template class Variable<double>;
+template class Variable<float>;
+template class Variable<int>;

@@ -59,15 +59,17 @@ void init(void){
 void display(void){
 	//clear all pixels
 	glClear(GL_COLOR_BUFFER_BIT);
-	Char character = Char("character",'a');
-	Double double_number = Double("double_number",3.14561234);
-	Float float_number = Float("float_number",1.628);
-	Int integer_number = Int("integer_number",3);
+	Variable<char> character("character",'a');
+	Variable<double> double_number("double_number",3.14561234);
+	Variable<float> float_number("float_number",1.628);
+	Variable<int> integer_number("integer_number",3);
 	std::cout << 1 << endl;
 	std::cout << character << endl;
 	std::cout << double_number << endl;
 	std::cout << float_number << endl;
 	std::cout << integer_number << endl;
+	Variable<double> test = double_number+double_number;
+	std::cout << test << endl;
 	/*
 	glPushMatrix();
 		//Some settings
