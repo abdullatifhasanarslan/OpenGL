@@ -2,10 +2,26 @@
 #define VARIABLES_H
 #include <string>
 #include <map>
+#include <vector>
 
 using namespace std;
+class entity{
+	public:
+		static int last_pose=0;
+		static std::vector<entity*> all_variables;
+		virtual void display() = 0;
+		entity(int x, int y, int width, int height);
+		void move(int x, int y);
+		void setPose(int x, int y);
+		bool checkCollision(int x, int y);
+	private:
+		int X, Y, WIDTH, HEIGHT;
+		int x, y, width, height;
+	protected:
+
+}
 template <class Type>
-class Variable{
+class Variable : public entity {
 	//static int last_pos=0;
 	public:
 		std::string name;		//remember to make this const
@@ -13,8 +29,6 @@ class Variable{
 		Variable(std::string name, Type value);
 		Variable(const Variable<Type> &object);	//copy constructor
 		void display();
-		void setPose(int x, int y);
-		bool checkCollision(int x, int y);
 		//assignment-----------------------------------------------------------------------------
 		Variable<Type>& operator=(const Variable<Type>& operand);		//simp-assignment:	a=b
 		Variable<Type>& operator+=(const Variable<Type>& operand);		//add-assignment:	a+=b
@@ -66,9 +80,7 @@ class Variable{
 		friend std::ostream& operator<<(std::ostream& out, const Variable<T>& variable);
 	private:
 		//int X, Y;
-		int x, y;
 		//int WIDTH, HEIGHT;
-		int width, height;
 	protected:
 	
 };

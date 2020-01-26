@@ -2,26 +2,25 @@
 #include "Variables.h"
 #include <GL/glut.h>
 #include <stdlib.h>
+#include <vector>
 
 using namespace std;
-NameSpace::NameSpace(){
+
+entity::entity(int x, int y, int width, int height){
 
 }
 
-NameSpace::~NameSpace(){
-
+void entity::move(int x, int y){
+	
 }
 
-void* NameSpace::get_Variable(const std::string name){
-	return NULL;
+void entity::setPose(int x, int y){
+	this->x=x;
+	this->y=y;
 }
 
-void NameSpace::add_Variable(const void* const variable){
+bool entity::checkCollision(int x, int y){
 
-}
-
-std::ostream& operator<<(std::ostream& out, const NameSpace& name_space) {
-    return out;
 }
 
 //-----------------------------------------------------------
@@ -64,12 +63,6 @@ void Variable<Type>::display(){
 			glVertex2d(this->x+this->width,this->y);
 		glEnd();
 	glPopMatrix();
-}
-
-template <class Type>
-void Variable<Type>::setPose(int x, int y){
-	this->x=x;
-	this->y=y;
 }
 
 template <class Type>
@@ -301,3 +294,24 @@ template class Variable<float>;
 template class Variable<int>;
 template class Variable<bool>;
 //template class Variable<void*>;
+
+//---------------------------------------------------------------------------------------
+NameSpace::NameSpace(){
+
+}
+
+NameSpace::~NameSpace(){
+
+}
+
+void* NameSpace::get_Variable(const std::string name){
+	return NULL;
+}
+
+void NameSpace::add_Variable(const void* const variable){
+
+}
+
+std::ostream& operator<<(std::ostream& out, const NameSpace& name_space) {
+    return out;
+}
