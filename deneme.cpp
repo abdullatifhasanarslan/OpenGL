@@ -10,6 +10,7 @@
 
 using namespace std;
 
+vector<entity*> entity::all_variables;
 //DRAW--------------------------
 void init(void);
 void display(void);
@@ -22,11 +23,6 @@ int WindowY = 360;
 int Width = 1000;
 int Height = 360;
 const char* WindowName = "deneme";
-Variable<char> character("character",'a');
-Variable<double> double_number("double_number",31.4561234);
-Variable<float> float_number("float_number",16.28);
-Variable<int> integer_number("integer_number",30);
-Variable<bool> boolean("boolean",true);
 /*
  *	Request double buffer display mode.
  *	Register mouse input callback functions
@@ -38,6 +34,7 @@ int main(int argc, char** argv){
 	glutInitWindowSize(Width,Height);
 	glutInitWindowPosition(WindowX,WindowY);
 	glutCreateWindow(WindowName);
+	glutFullScreen();
 
 	//DISPLAY-------------------
 	init();
@@ -58,19 +55,19 @@ void init(void){
 	glClearColor(0.3, 0.3, 0.3, 0.0);
 	glShadeModel(GL_FLAT);
 
-	character.setPose(0*200,0);
-	double_number.setPose(1*200,0);
-	float_number.setPose(2*200,0);
-	integer_number.setPose(3*200,0);
-	boolean.setPose(4*200,0);
-
-	std::cout << character << endl;
-	std::cout << double_number << endl;
-	std::cout << float_number << endl;
-	std::cout << integer_number << endl;
-	std::cout << boolean << endl;
-	Variable<double> test = double_number+double_number;
-	std::cout << test << endl;
+	new Variable<char>("character",'a');
+	new Variable<double>("double_number",31.4561234);
+	new Variable<float>("float_number",16.28);
+	new Variable<int>("integer_number",30);
+	new Variable<bool>("boolean",true);
+	new Variable<bool>("newbool",false);
+	entity* current;
+	int size = entity::all_variables.size();
+	for(int i=0;i<size;i++){
+		current=entity::all_variables[i];
+		current->setPose(i*25,i*50);
+		//std::cout << (*current) << endl;
+	}
 }
 
 void display(void){
@@ -80,11 +77,12 @@ void display(void){
 		//Some settings
 		glColor3f(0.7, 0.7, 0.0);
 		glLineWidth(20.0);
-		character.display();
-		double_number.display();
-		float_number.display();
-		integer_number.display();
-		boolean.display();
+		entity* current;
+		int size = entity::all_variables.size();
+		for(int i=0;i<size;i++){
+			current=entity::all_variables[i];
+			current->display();
+		}
 	glPopMatrix();
 	glFlush();
 	/*

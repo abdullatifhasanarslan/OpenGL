@@ -5,13 +5,23 @@
 #include <vector>
 
 using namespace std;
+extern GLubyte fly[];
+extern GLubyte halftone[];
+extern GLubyte something[];
+entity::entity(){
+	// this->X=x;
+	// this->Y=y;
+	// this->WIDTH=width;
+	// this->HEIGHT=height;
+}
 
-entity::entity(int x, int y, int width, int height){
-
+entity::~entity(){
+	std::cerr << "There is something here my friend" << endl;
 }
 
 void entity::move(int x, int y){
-	
+	this->x=x;
+	this->y=y;
 }
 
 void entity::setPose(int x, int y){
@@ -19,8 +29,26 @@ void entity::setPose(int x, int y){
 	this->y=y;
 }
 
-bool entity::checkCollision(int x, int y){
+void entity::setSize(int width, int height){
+	this->width=width;
+	this->height=height;
+}
 
+bool entity::checkCollision(int x, int y){
+	//cout  << this->name << ":  " << this->x << "," << this->y << "----" << x << "," << y << endl;
+	cout  << this->x << "," << this->y << "----" << x << "," << y << endl;
+	if(this->x<x && x<this->x+this->width && this->y<y && y<this->y+this->height){
+		return true;
+	}
+	return false;
+}
+
+int entity::getx(){
+	return this->x;
+}
+
+int entity::gety(){
+	return this->y;
 }
 
 //-----------------------------------------------------------
@@ -28,33 +56,41 @@ template <class Type>
 Variable<Type>::Variable(std::string name, Type value){
 	this->name=name;
 	this->value=value;
-	this->width=200;
-	this->height=50;
+	this->setPose(0,0);
+	this->setSize(200,50);
+	entity::all_variables.push_back(this);
 }
 template <>
 Variable<bool>::Variable(std::string name, bool value){
 	this->name=name;
 	this->value=value;
-	this->width=50;
-	this->height=50;
+	this->setPose(500,100);
+	this->setSize(50,50);
+	entity::all_variables.push_back(this);
 }
 template <>
 Variable<int>::Variable(std::string name, int value){
 	this->name=name;
 	this->value=value;
-	this->width=value;
-	this->height=50;
+	this->setPose(0,300);
+	this->setSize(value,50);
+	entity::all_variables.push_back(this);
 }
 template <class Type>
 Variable<Type>::Variable(const Variable<Type> &object){
 	this->name="<blank>";
 	this->value=object.value;
+	this->setPose(object.x,object.y);
+	this->setSize(object.width,object.height);
+	entity::all_variables.push_back(this);
 }
 
 template <class Type>
 void Variable<Type>::display(){
 	glPushMatrix();
+		glEnable(GL_POLYGON_STIPPLE);
 		glPolygonMode(GL_FRONT, GL_FILL);
+		glPolygonStipple(fly);
 		glColor3f(0.7, 0.7, 0.0);
 		glBegin(GL_POLYGON);
 			glVertex2d(this->x,this->y);
@@ -62,17 +98,39 @@ void Variable<Type>::display(){
 			glVertex2d(this->x+this->width,this->y+this->height);
 			glVertex2d(this->x+this->width,this->y);
 		glEnd();
+		glDisable(GL_POLYGON_STIPPLE);
 	glPopMatrix();
 }
 
-template <class Type>
-bool Variable<Type>::checkCollision(int x, int y){
-	cout  << this->name << ":  " << this->x << "," << this->y << "----" << x << "," << y << endl;
-	if(this->x<x && x<this->x+this->width && this->y<y && y<this->y+this->height){
-		cout << "a" << endl;
-		return true;
-	}
-	return false;
+template <>
+void Variable<char>::display(){
+	glPushMatrix();
+		glEnable(GL_POLYGON_STIPPLE);
+		glPolygonMode(GL_FRONT, GL_FILL);
+		glPolygonStipple(something);
+		glColor3f(0.7, 0.7, 0.0);
+		glBegin(GL_POLYGON);
+			glVertex2d(this->x,this->y);
+			glVertex2d(this->x,this->y+this->height);
+			glVertex2d(this->x+this->width,this->y+this->height);
+			glVertex2d(this->x+this->width,this->y);
+		glEnd();
+		glDisable(GL_POLYGON_STIPPLE);
+	glPopMatrix();
+}
+
+template <>
+void Variable<bool>::display(){
+	glPushMatrix();
+		glPolygonMode(GL_FRONT, GL_FILL);
+		(this->value ? glColor3f(0.0, 0.7, 0.0) : glColor3f(0.7, 0.0, 0.0));
+		glBegin(GL_POLYGON);
+			glVertex2d(this->x,this->y);
+			glVertex2d(this->x,this->y+this->height);
+			glVertex2d(this->x+this->width,this->y+this->height);
+			glVertex2d(this->x+this->width,this->y);
+		glEnd();
+	glPopMatrix();
 }
 
 //assignment-----------------------------------------------------------------------------

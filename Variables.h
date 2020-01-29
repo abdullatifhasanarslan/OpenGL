@@ -7,19 +7,24 @@
 using namespace std;
 class entity{
 	public:
-		static int last_pose=0;
-		static std::vector<entity*> all_variables;
-		virtual void display() = 0;
-		entity(int x, int y, int width, int height);
+		//static int last_pose=0;
+		entity();
+		virtual ~entity();
 		void move(int x, int y);
 		void setPose(int x, int y);
+		void setSize(int width, int height);
 		bool checkCollision(int x, int y);
+		friend void mouseDragged(int x, int y);
+		static vector<entity*> all_variables;
+		int getx();
+		int gety();
+	
+		virtual void display() = 0;
 	private:
+	protected:
 		int X, Y, WIDTH, HEIGHT;
 		int x, y, width, height;
-	protected:
-
-}
+};
 template <class Type>
 class Variable : public entity {
 	//static int last_pos=0;
