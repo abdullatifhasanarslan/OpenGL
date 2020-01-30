@@ -8,6 +8,9 @@ using namespace std;
 extern GLubyte fly[];
 extern GLubyte halftone[];
 extern GLubyte something[];
+extern int Width;
+extern int Height;
+int entity::lastPose=175;
 entity::entity(){
 	// this->X=x;
 	// this->Y=y;
@@ -56,24 +59,27 @@ template <class Type>
 Variable<Type>::Variable(std::string name, Type value){
 	this->name=name;
 	this->value=value;
-	this->setPose(0,0);
 	this->setSize(200,50);
+	this->setPose(375,entity::lastPose+this->height);
+	entity::lastPose+=this->height+30;
 	entity::all_variables.push_back(this);
 }
 template <>
 Variable<bool>::Variable(std::string name, bool value){
 	this->name=name;
 	this->value=value;
-	this->setPose(500,100);
 	this->setSize(50,50);
+	this->setPose(375,entity::lastPose+this->height);
+	entity::lastPose+=this->height+30;
 	entity::all_variables.push_back(this);
 }
 template <>
 Variable<int>::Variable(std::string name, int value){
 	this->name=name;
 	this->value=value;
-	this->setPose(0,300);
 	this->setSize(value,50);
+	this->setPose(375,entity::lastPose+this->height);
+	entity::lastPose+=this->height+30;
 	entity::all_variables.push_back(this);
 }
 template <class Type>
@@ -93,10 +99,10 @@ void Variable<Type>::display(){
 		glPolygonStipple(fly);
 		glColor3f(0.7, 0.7, 0.0);
 		glBegin(GL_POLYGON);
-			glVertex2d(this->x,this->y);
-			glVertex2d(this->x,this->y+this->height);
-			glVertex2d(this->x+this->width,this->y+this->height);
-			glVertex2d(this->x+this->width,this->y);
+			glVertex2d(this->x,Height-(this->y));
+			glVertex2d(this->x,Height-(this->y+this->height));
+			glVertex2d(this->x+this->width,Height-(this->y+this->height));
+			glVertex2d(this->x+this->width,Height-(this->y));
 		glEnd();
 		glDisable(GL_POLYGON_STIPPLE);
 	glPopMatrix();
@@ -110,10 +116,10 @@ void Variable<char>::display(){
 		glPolygonStipple(something);
 		glColor3f(0.7, 0.7, 0.0);
 		glBegin(GL_POLYGON);
-			glVertex2d(this->x,this->y);
-			glVertex2d(this->x,this->y+this->height);
-			glVertex2d(this->x+this->width,this->y+this->height);
-			glVertex2d(this->x+this->width,this->y);
+			glVertex2d(this->x,Height-(this->y));
+			glVertex2d(this->x,Height-(this->y+this->height));
+			glVertex2d(this->x+this->width,Height-(this->y+this->height));
+			glVertex2d(this->x+this->width,Height-(this->y));
 		glEnd();
 		glDisable(GL_POLYGON_STIPPLE);
 	glPopMatrix();
@@ -125,10 +131,10 @@ void Variable<bool>::display(){
 		glPolygonMode(GL_FRONT, GL_FILL);
 		(this->value ? glColor3f(0.0, 0.7, 0.0) : glColor3f(0.7, 0.0, 0.0));
 		glBegin(GL_POLYGON);
-			glVertex2d(this->x,this->y);
-			glVertex2d(this->x,this->y+this->height);
-			glVertex2d(this->x+this->width,this->y+this->height);
-			glVertex2d(this->x+this->width,this->y);
+			glVertex2d(this->x,Height-(this->y));
+			glVertex2d(this->x,Height-(this->y+this->height));
+			glVertex2d(this->x+this->width,Height-(this->y+this->height));
+			glVertex2d(this->x+this->width,Height-(this->y));
 		glEnd();
 	glPopMatrix();
 }
@@ -366,7 +372,7 @@ void* NameSpace::get_Variable(const std::string name){
 	return NULL;
 }
 
-void NameSpace::add_Variable(const void* const variable){
+void NameSpace::add_Variable(const entity* const variable){
 
 }
 

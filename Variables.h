@@ -24,6 +24,7 @@ class entity{
 	protected:
 		int X, Y, WIDTH, HEIGHT;
 		int x, y, width, height;
+		static int lastPose;
 };
 template <class Type>
 class Variable : public entity {
@@ -117,13 +118,14 @@ class NameSpace{
 		NameSpace();
 		~NameSpace();
 		void* get_Variable(const std::string name);
-		void add_Variable(const void* const variable);
+		void add_Variable(const entity* const variable);
 		friend std::ostream& operator<<(std::ostream& out, const NameSpace& name_space);
 	private:
 		NameSpace* parent;
-		std::map<std::string,void*> names;
+		std::map<std::string,entity*> names;
 	protected:
 };
+
 #endif
 
 /*

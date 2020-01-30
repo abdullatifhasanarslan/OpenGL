@@ -15,13 +15,15 @@ vector<entity*> entity::all_variables;
 void init(void);
 void display(void);
 void spinDisplay();
+void drawFuncSquare();
+
 
 
 //VARIABLES---------------------
-int WindowX = 640;
-int WindowY = 360;
-int Width = 1000;
-int Height = 360;
+int WindowX = 0;
+int WindowY = 0;
+int Width = 1920;
+int Height = 1080;
 const char* WindowName = "deneme";
 /*
  *	Request double buffer display mode.
@@ -43,6 +45,7 @@ int main(int argc, char** argv){
 	//CONTROL-------------------
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyPressed);
+	glutSpecialFunc(specialPressed);
 	glutMouseFunc(mousePressed);
 	glutMotionFunc(mouseDragged);
 	glutIdleFunc(IDLE);
@@ -61,13 +64,13 @@ void init(void){
 	new Variable<int>("integer_number",30);
 	new Variable<bool>("boolean",true);
 	new Variable<bool>("newbool",false);
-	entity* current;
-	int size = entity::all_variables.size();
-	for(int i=0;i<size;i++){
-		current=entity::all_variables[i];
-		current->setPose(i*25,i*50);
-		//std::cout << (*current) << endl;
-	}
+	// entity* current;
+	// int size = entity::all_variables.size();
+	// for(int i=0;i<size;i++){
+	// 	current=entity::all_variables[i];
+	// 	current->setPose(i*25,i*50);
+	// 	//std::cout << (*current) << endl;
+	// }
 }
 
 void display(void){
@@ -77,6 +80,10 @@ void display(void){
 		//Some settings
 		glColor3f(0.7, 0.7, 0.0);
 		glLineWidth(20.0);
+		
+		//drawing outer rectangle
+		drawFuncSquare();
+		//drawing all variables
 		entity* current;
 		int size = entity::all_variables.size();
 		for(int i=0;i<size;i++){
@@ -198,4 +205,18 @@ void display(void){
 	glPopMatrix();
 	glFlush();
 	*/
+}
+
+void drawFuncSquare(){
+	glPushMatrix();
+		//Some settings
+		glColor3f(1.0, 1.0, 1.0);
+		glLineWidth(20.0);
+		glBegin(GL_LINE_LOOP);
+			glVertex2d(325,Height-150);
+			glVertex2d(1875,Height-150);
+			glVertex2d(1875,Height-1000);
+			glVertex2d(325,Height-1000);
+		glEnd();	
+	glPopMatrix();
 }
