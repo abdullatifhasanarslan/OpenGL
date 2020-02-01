@@ -10,7 +10,6 @@ extern GLubyte halftone[];
 extern GLubyte something[];
 extern int Width;
 extern int Height;
-int entity::lastPose=175;
 entity::entity(){
 	// this->X=x;
 	// this->Y=y;
@@ -53,6 +52,13 @@ int entity::getx(){
 int entity::gety(){
 	return this->y;
 }
+int entity::getwidth(){
+	return this->width;
+}
+
+int entity::getheight(){
+	return this->height;
+}
 
 //-----------------------------------------------------------
 template <class Type>
@@ -60,44 +66,53 @@ Variable<Type>::Variable(std::string name, Type value){
 	this->name=name;
 	this->value=value;
 	this->setSize(200,50);
-	this->setPose(375,entity::lastPose+this->height);
-	entity::lastPose+=this->height+30;
-	entity::all_variables.push_back(this);
 }
 template <>
 Variable<bool>::Variable(std::string name, bool value){
 	this->name=name;
 	this->value=value;
 	this->setSize(50,50);
-	this->setPose(375,entity::lastPose+this->height);
-	entity::lastPose+=this->height+30;
-	entity::all_variables.push_back(this);
+}
+template <>
+Variable<char>::Variable(std::string name, char value){
+	this->name=name;
+	this->value=value;
+	this->setSize(50,50);
 }
 template <>
 Variable<int>::Variable(std::string name, int value){
 	this->name=name;
 	this->value=value;
 	this->setSize(value,50);
-	this->setPose(375,entity::lastPose+this->height);
-	entity::lastPose+=this->height+30;
-	entity::all_variables.push_back(this);
+}
+template <>
+Variable<float>::Variable(std::string name, float value){
+	this->name=name;
+	this->value=value;
+	this->setSize(value,50);
+}
+template <>
+Variable<double>::Variable(std::string name, double value){
+	this->name=name;
+	this->value=value;
+	this->setSize(value,50);
 }
 template <class Type>
 Variable<Type>::Variable(const Variable<Type> &object){
 	this->name="<blank>";
 	this->value=object.value;
-	this->setPose(object.x,object.y);
 	this->setSize(object.width,object.height);
-	entity::all_variables.push_back(this);
 }
 
 template <class Type>
-void Variable<Type>::display(){
+void Variable<Type>::display(int x, int y){
+	this->x=x;
+	this->y=y;
 	glPushMatrix();
 		glEnable(GL_POLYGON_STIPPLE);
 		glPolygonMode(GL_FRONT, GL_FILL);
 		glPolygonStipple(fly);
-		glColor3f(0.7, 0.7, 0.0);
+		glColor3f(0.4, 0.4, 1.0);
 		glBegin(GL_POLYGON);
 			glVertex2d(this->x,Height-(this->y));
 			glVertex2d(this->x,Height-(this->y+this->height));
@@ -109,7 +124,9 @@ void Variable<Type>::display(){
 }
 
 template <>
-void Variable<char>::display(){
+void Variable<char>::display(int x, int y){
+	this->x=x;
+	this->y=y;
 	glPushMatrix();
 		glEnable(GL_POLYGON_STIPPLE);
 		glPolygonMode(GL_FRONT, GL_FILL);
@@ -126,7 +143,9 @@ void Variable<char>::display(){
 }
 
 template <>
-void Variable<bool>::display(){
+void Variable<bool>::display(int x, int y){
+	this->x=x;
+	this->y=y;
 	glPushMatrix();
 		glPolygonMode(GL_FRONT, GL_FILL);
 		(this->value ? glColor3f(0.0, 0.7, 0.0) : glColor3f(0.7, 0.0, 0.0));
@@ -368,12 +387,13 @@ NameSpace::~NameSpace(){
 
 }
 
-void* NameSpace::get_Variable(const std::string name){
+entity* NameSpace::get_Variable(const std::string name){
 	return NULL;
 }
 
-void NameSpace::add_Variable(const entity* const variable){
-
+void NameSpace::add_Variable(entity*  variable){
+	this->names[variable->name]=variable;
+	this->ordered.push_back(variable);
 }
 
 std::ostream& operator<<(std::ostream& out, const NameSpace& name_space) {

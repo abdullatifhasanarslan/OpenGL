@@ -8,6 +8,7 @@ using namespace std;
 class entity{
 	public:
 		//static int last_pose=0;
+		std::string name;		//remember to make this const
 		entity();
 		virtual ~entity();
 		void move(int x, int y);
@@ -15,26 +16,26 @@ class entity{
 		void setSize(int width, int height);
 		bool checkCollision(int x, int y);
 		friend void mouseDragged(int x, int y);
-		static vector<entity*> all_variables;
 		int getx();
 		int gety();
+		int getwidth();
+		int getheight();
+		//static void reset_last_pose(int new_last_pose);
 	
-		virtual void display() = 0;
+		virtual void display(int x, int y) = 0;
 	private:
 	protected:
 		int X, Y, WIDTH, HEIGHT;
 		int x, y, width, height;
-		static int lastPose;
 };
 template <class Type>
 class Variable : public entity {
 	//static int last_pos=0;
 	public:
-		std::string name;		//remember to make this const
 		Type value;
 		Variable(std::string name, Type value);
 		Variable(const Variable<Type> &object);	//copy constructor
-		void display();
+		void display(int x, int y);
 		//assignment-----------------------------------------------------------------------------
 		Variable<Type>& operator=(const Variable<Type>& operand);		//simp-assignment:	a=b
 		Variable<Type>& operator+=(const Variable<Type>& operand);		//add-assignment:	a+=b
@@ -117,12 +118,13 @@ class NameSpace{
 	public:
 		NameSpace();
 		~NameSpace();
-		void* get_Variable(const std::string name);
-		void add_Variable(const entity* const variable);
+		entity* get_Variable(const std::string name);
+		void add_Variable(entity* variable);
 		friend std::ostream& operator<<(std::ostream& out, const NameSpace& name_space);
+		std::map<std::string,entity*> names;
+		std::vector<entity*> ordered;
 	private:
 		NameSpace* parent;
-		std::map<std::string,entity*> names;
 	protected:
 };
 

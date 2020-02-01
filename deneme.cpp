@@ -10,13 +10,12 @@
 
 using namespace std;
 
-vector<entity*> entity::all_variables;
 //DRAW--------------------------
 void init(void);
 void display(void);
 void spinDisplay();
 void drawFuncSquare();
-
+void drawStackSquare();
 
 
 //VARIABLES---------------------
@@ -25,6 +24,11 @@ int WindowY = 0;
 int Width = 1920;
 int Height = 1080;
 const char* WindowName = "deneme";
+
+NameSpace* active_stack;
+NameSpace* heap;
+NameSpace* global; 
+PipeLine* PipeLine::active_pipeline;
 /*
  *	Request double buffer display mode.
  *	Register mouse input callback functions
@@ -57,20 +61,73 @@ int main(int argc, char** argv){
 void init(void){
 	glClearColor(0.3, 0.3, 0.3, 0.0);
 	glShadeModel(GL_FLAT);
+	glEnable(GL_POLYGON_STIPPLE);
 
-	new Variable<char>("character",'a');
-	new Variable<double>("double_number",31.4561234);
-	new Variable<float>("float_number",16.28);
-	new Variable<int>("integer_number",30);
-	new Variable<bool>("boolean",true);
-	new Variable<bool>("newbool",false);
-	// entity* current;
-	// int size = entity::all_variables.size();
-	// for(int i=0;i<size;i++){
-	// 	current=entity::all_variables[i];
-	// 	current->setPose(i*25,i*50);
-	// 	//std::cout << (*current) << endl;
-	// }
+	// active_stack = new NameSpace();
+	// active_stack->add_Variable( new Variable<char>("character",'a') );
+	// active_stack->add_Variable( new Variable<double>("double_number",31.4561234) );
+	// active_stack->add_Variable( new Variable<float>("float_number",16.28) );
+	// active_stack->add_Variable( new Variable<int>("integer_number",30) );
+	// active_stack->add_Variable( new Variable<bool>("boolean",true) );
+	// active_stack->add_Variable( new Variable<bool>("newbool",false) );
+	// heap = new NameSpace();
+	// heap->add_Variable( new Variable<int>("",200) );
+	// global = new NameSpace(); 
+	// global->add_Variable( new Variable<int>("",100) );
+
+	active_stack = new NameSpace();
+	active_stack->add_Variable( new Variable<char>("character",'a') );
+	active_stack->add_Variable( new Variable<char>("char2",'2') );
+	active_stack->add_Variable( new Variable<char>("char3",'3') );
+	active_stack->add_Variable( new Variable<char>("char4",'4') );
+	active_stack->add_Variable( new Variable<char>("char4",'4') );
+	active_stack->add_Variable( new Variable<char>("char4",'4') );
+	active_stack->add_Variable( new Variable<char>("char4",'4') );
+	active_stack->add_Variable( new Variable<char>("char4",'4') );
+	heap = new NameSpace();
+	heap->add_Variable( new Variable<int>("int1",200) );
+	heap->add_Variable( new Variable<int>("int2",150) );
+	heap->add_Variable( new Variable<int>("int3",100) );
+	heap->add_Variable( new Variable<int>("int3",75) );
+	heap->add_Variable( new Variable<int>("int3",70) );
+	heap->add_Variable( new Variable<int>("int3",50) );
+	heap->add_Variable( new Variable<int>("int3",40) );
+	heap->add_Variable( new Variable<int>("int3",30) );
+	heap->add_Variable( new Variable<int>("int3",20) );
+	heap->add_Variable( new Variable<int>("int4",10) );
+	global = new NameSpace(); 
+	global->add_Variable( new Variable<bool>("true",true) );
+	global->add_Variable( new Variable<bool>("true2",true) );
+	global->add_Variable( new Variable<bool>("false",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	global->add_Variable( new Variable<bool>("false2",false) );
+	
+	PipeLine::active_pipeline = new PipeLine();
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0) );
 }
 
 void display(void){
@@ -81,15 +138,33 @@ void display(void){
 		glColor3f(0.7, 0.7, 0.0);
 		glLineWidth(20.0);
 		
-		//drawing outer rectangle
+		//drawing rectangles
 		drawFuncSquare();
-		//drawing all variables
-		entity* current;
-		int size = entity::all_variables.size();
-		for(int i=0;i<size;i++){
-			current=entity::all_variables[i];
-			current->display();
+		drawStackSquare();
+		//drawing stack
+		int last_pose=225;
+		int size = active_stack->ordered.size();
+		for(int i=0; i<size; i++){
+			active_stack->ordered[i]->display(375,last_pose);
+			last_pose+=active_stack->ordered[i]->getheight()+30;
 		}
+		//drawing heap
+		last_pose=225;
+		size = heap->ordered.size();
+		for(int i=0; i<size; i++){
+			heap->ordered[i]->display(75,last_pose);
+			last_pose+=heap->ordered[i]->getheight()+30;
+		}
+		//drawing globals
+		last_pose=375;
+		size = global->ordered.size();
+		for(int i=0; i<size; i++){
+			global->ordered[i]->display(last_pose,50);
+			last_pose+=global->ordered[i]->getwidth()+30;
+		}
+
+		PipeLine::active_pipeline->display();
+
 	glPopMatrix();
 	glFlush();
 	/*
@@ -207,10 +282,43 @@ void display(void){
 	*/
 }
 
+/*
+				 	 |50
+				 	 |50-200-25
+				 	 |50
+			-----------------------------			
+			| 	 	 |50				|
+			|	------------			|
+			|	|	 |25   |			|
+-75-200-50- |-25|-25-200-25|-25-25-200	|50
+			|	|		   |			|
+			|	|		   |			|
+			|	------------			|
+			|						  	|
+			-----------------------------
+*/
+
+
+
+void drawStackSquare(){
+	glPushMatrix();
+		//Some settings
+		glColor3f(0.7, 0.7, 0.0);
+		glLineWidth(20.0);
+		glBegin(GL_LINE_LOOP);
+			glVertex2d(350,Height-200);
+			glVertex2d(600,Height-200);
+			glVertex2d(600,Height-950);
+			glVertex2d(350,Height-950);
+		glEnd();	
+	glPopMatrix();
+
+}
+
 void drawFuncSquare(){
 	glPushMatrix();
 		//Some settings
-		glColor3f(1.0, 1.0, 1.0);
+		glColor3f(0.7, 0.7, 0.0);
 		glLineWidth(20.0);
 		glBegin(GL_LINE_LOOP);
 			glVertex2d(325,Height-150);
@@ -220,3 +328,5 @@ void drawFuncSquare(){
 		glEnd();	
 	glPopMatrix();
 }
+
+

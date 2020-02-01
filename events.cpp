@@ -10,6 +10,9 @@ extern void Spin();
 
 extern int Width;
 extern int Height;
+extern NameSpace* active_stack;
+extern NameSpace* heap;
+extern NameSpace* global; 
 
 int postX, postY;
 int viewX=0;//left
@@ -92,11 +95,12 @@ void mouseDragged(int x, int y){
 	int Y=(y/scale)-((Height/scale)-Height)-viewY;
 	cout << X << "," << Y << endl; 
 	entity* current;
-	int size = entity::all_variables.size();
+	int size = active_stack->ordered.size();
 	for(int i=0;i<size;i++){
-		current=entity::all_variables[i];
+		current=active_stack->ordered[i];
 		if(current->checkCollision(X,Y)){
-			current->setPose(current->x+(X-postX),current->y+(Y-postY));
+			cout << "COLLISION" << endl;
+			// current->setPose(current->x+(X-postX),current->y+(Y-postY));
 		}
 	}
 	cout << endl << endl;
