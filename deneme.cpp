@@ -7,6 +7,7 @@
 #include "Variables.h"
 #include "Functions.h"
 #include "utility.h"
+#include "all_functions.h"
 
 using namespace std;
 
@@ -112,22 +113,23 @@ void init(void){
 	global->add_Variable( new Variable<bool>("false2",false) );
 	global->add_Variable( new Variable<bool>("false2",false) );
 	
+
 	PipeLine::active_pipeline = new PipeLine();
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined2()) );
+	PipeLine::active_pipeline->add_Command( new Command(0,1,new user_defined3()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,3) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined4()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined5()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined6()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined7()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined8()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined9()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined10(1,2,3)) );
+	PipeLine::active_pipeline->add_Command( new Command(1,4) );
+	PipeLine::active_pipeline->add_Command( new Command(0,2) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined10(4,5,6)) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined10(7,8,9)) );
 }
 
 void display(void){
