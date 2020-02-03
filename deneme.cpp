@@ -75,7 +75,6 @@ void init(void){
 	// heap->add_Variable( new Variable<int>("",200) );
 	// global = new NameSpace(); 
 	// global->add_Variable( new Variable<int>("",100) );
-
 	active_stack = new NameSpace();
 	active_stack->add_Variable( new Variable<char>("character",'a') );
 	active_stack->add_Variable( new Variable<char>("char2",'2') );

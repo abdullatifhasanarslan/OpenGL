@@ -3,6 +3,7 @@
 #include <iostream>
 #include "events.h"
 #include "Variables.h"
+#include "Functions.h"
 
 using namespace std;
 
@@ -18,6 +19,8 @@ int postX, postY;
 int viewX=0;//left
 int viewY=0;//bottom
 double scale=1.0;
+int current=0;
+
 void reshape(int w, int h){
 	Width=w;
 	Height=h;
@@ -33,8 +36,15 @@ void keyPressed(unsigned char key, int x, int y){
 			cout << "Terminating---------" << endl;
 			exit (0);
 			break;
+		case 13:
+			int size=PipeLine::active_pipeline->commands.size();
+			if(++current==size){
+				current=0;
+			}
+			PipeLine::active_pipeline->commands[current]->implement();
+			break;
 		// default:
-			// cout << key << "," << x << "," << y << endl;
+		// 	cout << key << "," << x << "," << y << endl;
 	}
 }
 

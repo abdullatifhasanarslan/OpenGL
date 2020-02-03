@@ -17,9 +17,11 @@ class Function{
 		Function();
 		~Function();
 		virtual void display(int x, int y)=0;
+		virtual void implement()=0;
 	private:
 
 	protected:
+		int x, y, width, height;
 
 };
 
@@ -27,6 +29,7 @@ class Command{
 	public:
 		Command(int level=0, int type=0, Function* func=NULL);
 		void display(int x, int y);
+		void implement();
 	private:
 		int level;
 		int type;

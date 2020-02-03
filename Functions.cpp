@@ -105,6 +105,12 @@ void Command::display(int x, int y){
 	glPopMatrix();
 }
 
+void Command::implement(){
+	if(this->func!=NULL){
+		this->func->implement();
+	}
+}
+
 //---------------------------------------------------------
 
 PipeLine::PipeLine(){
