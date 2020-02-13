@@ -19,6 +19,7 @@ int postX, postY;
 int viewX=0;//left
 int viewY=0;//bottom
 double scale=1.0;
+
 int current=0;
 
 void reshape(int w, int h){
@@ -31,20 +32,30 @@ void reshape(int w, int h){
 }
 
 void keyPressed(unsigned char key, int x, int y){
+	int size;
 	switch(key){
 		case 27:
 			cout << "Terminating---------" << endl;
 			exit (0);
 			break;
 		case 13:
-			int size=PipeLine::active_pipeline->commands.size();
+			size=PipeLine::active_pipeline->commands.size();
 			if(++current==size){
 				current=0;
 			}
 			PipeLine::active_pipeline->commands[current]->implement();
 			break;
-		// default:
-		// 	cout << key << "," << x << "," << y << endl;
+		case 32:
+			viewX=0;
+			viewY=0;
+			scale=1.0;
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			gluOrtho2D(viewX, (GLdouble) (viewX+Width/scale), viewY, (GLdouble) (viewY+Height/scale));
+			glutPostRedisplay();
+			break;
+		default:
+			cout << (int)key << "," << x << "," << y << endl;
 	}
 }
 
