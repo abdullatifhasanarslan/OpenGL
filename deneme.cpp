@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <iostream>
+#include <string>
 #include "events.h"
 #include "models.h"
 #include "Variables.h"
@@ -17,6 +18,23 @@ void display(void);
 void spinDisplay();
 void drawFuncSquare();
 void drawStackSquare();
+
+// void RenderString(GLdouble x, GLdouble y, const std::string &string){
+// 	glColor3d(1.0, 0.0, 0.0);
+// 	glRasterPos2f(x,y);
+// 	for(int n=0; n<string.size(); n++){
+// 		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[s]);
+// 	}
+// }
+
+
+void RenderString(int x, int y, const std::string &string){
+	glColor3d(1.0, 0.0, 0.0);
+	glRasterPos2f(x,y);
+	for(uint n=0; n<string.size(); n++){
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[n]);
+	}
+}
 
 
 //VARIABLES---------------------
@@ -165,7 +183,8 @@ void display(void){
 		}
 
 		PipeLine::active_pipeline->display();
-
+		string test("heeeeyoooo");
+		RenderString(500,500,test);
 	glPopMatrix();
 	glFlush();
 	/*
@@ -177,7 +196,7 @@ void display(void){
 		glLineWidth(20.0);
 
 		//Outer Rectangle
-		glEnable(GL_LINE_STIPPLE);
+		glEnable(GL_LINE_STIPPLE);dd
 		glLineStipple(5, 0x5555);
 		Line(50-Width/2,Height/2-50,Width/2-50,Height/2-50);
 		glLineStipple(10, 0x3333);
