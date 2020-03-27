@@ -1,8 +1,10 @@
 #include <iostream>
 #include "Variables.h"
+#include "utility.h"
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <vector>
+#include <string>
 
 using namespace std;
 extern GLubyte fly[];
@@ -10,6 +12,19 @@ extern GLubyte halftone[];
 extern GLubyte something[];
 extern int Width;
 extern int Height;
+
+
+void text(std::string str, int x, int y){
+	glColor3d(1.0, 0.0, 0.0);
+	glRasterPos2f(x,y);
+
+	for(uint n=0; n<str.size(); n++){
+
+		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, str[n]);
+	}
+}
+
+
 entity::entity(){
 	// this->X=x;
 	// this->Y=y;
@@ -109,6 +124,14 @@ void Variable<Type>::display(int x, int y){
 	this->x=x;
 	this->y=y;
 	glPushMatrix();
+		/*
+		glRasterPos2f(this->x,this->y);
+		for(uint i=0;i<this->name.size();i++){
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, this->name[i]);
+		}
+		*/
+		text(this->name,this->x,Height-this->y);
+		/*
 		glEnable(GL_POLYGON_STIPPLE);
 		glPolygonMode(GL_FRONT, GL_FILL);
 		glPolygonStipple(fly);
@@ -120,6 +143,8 @@ void Variable<Type>::display(int x, int y){
 			glVertex2d(this->x+this->width,Height-(this->y));
 		glEnd();
 		glDisable(GL_POLYGON_STIPPLE);
+		*/
+		
 	glPopMatrix();
 }
 
@@ -128,6 +153,15 @@ void Variable<char>::display(int x, int y){
 	this->x=x;
 	this->y=y;
 	glPushMatrix();
+		/*
+		glRasterPos2f(this->x,this->y);
+		for(uint i=0;i<this->name.size();i++){
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, this->name[i]);
+		}
+		*/
+		text(this->name,this->x,Height-this->y);
+
+		/*
 		glEnable(GL_POLYGON_STIPPLE);
 		glPolygonMode(GL_FRONT, GL_FILL);
 		glPolygonStipple(something);
@@ -139,6 +173,7 @@ void Variable<char>::display(int x, int y){
 			glVertex2d(this->x+this->width,Height-(this->y));
 		glEnd();
 		glDisable(GL_POLYGON_STIPPLE);
+		*/
 	glPopMatrix();
 }
 
@@ -147,6 +182,15 @@ void Variable<bool>::display(int x, int y){
 	this->x=x;
 	this->y=y;
 	glPushMatrix();
+		/*
+		glRasterPos2f(this->x,this->y);
+		for(uint i=0;i<this->name.size();i++){
+			glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, this->name[i]);
+		}
+		*/
+		text(this->name,this->x,Height-this->y);
+
+		/*
 		glPolygonMode(GL_FRONT, GL_FILL);
 		(this->value ? glColor3f(0.0, 0.7, 0.0) : glColor3f(0.7, 0.0, 0.0));
 		glBegin(GL_POLYGON);
@@ -155,6 +199,7 @@ void Variable<bool>::display(int x, int y){
 			glVertex2d(this->x+this->width,Height-(this->y+this->height));
 			glVertex2d(this->x+this->width,Height-(this->y));
 		glEnd();
+		*/
 	glPopMatrix();
 }
 

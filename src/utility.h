@@ -2,6 +2,7 @@
 #define UTILITY_H
 #include "Variables.h"
 #include <string>
+#include <GL/glut.h>
 #define Line(x1,y1,x2,y2) 	glBegin(GL_LINES);\
 								glVertex2f((x1),(y1));\
 								glVertex2f((x2),(y2));\
@@ -12,5 +13,5 @@ std::ostream& operator<<(std::ostream& out, const Variable<T>& variable) {
     return out;
 }
 
-void print(std::string text, int x, int y);
+
 #endif
