@@ -3,14 +3,12 @@
 #include <iostream>
 #include "Functions.h"
 #include "utility.h"
-#include <string>
 
 using namespace std;
 
 extern int Width;
 extern int Height;
 
-void text(std::string str, int x, int y);
 
 
 //---------------------------------------------------------
@@ -25,16 +23,14 @@ Function::~Function(){
 
 //---------------------------------------------------------
 
-Command::Command(string str, int level, int type, Function* func){
+Command::Command(int level, int type, Function* func){
 	this->level=level;
 	this->type=type;
 	this->func=func;
-	this->str=str;
 }
 
 void Command::display(int x, int y){
 	glPushMatrix();
-		
 		glColor3f(0.7, 0.7, 0.0);
 		glEnable(GL_LINE_STIPPLE);
 		glLineWidth(1.0);
@@ -103,8 +99,7 @@ void Command::display(int x, int y){
 
 		x+=60;
 		if(this->func!=NULL){
-			text(this->str,x,y);
-			//this->func->display(x,y);
+			this->func->display(x,y);
 		}
 		glDisable(GL_LINE_STIPPLE);
 	glPopMatrix();

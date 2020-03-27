@@ -3,8 +3,6 @@
 
 #include <vector>
 #include <iostream>
-#include <string>
-
 
 #define	NORMAL 0
 #define	IF 1
@@ -29,7 +27,7 @@ class Function{
 
 class Command{
 	public:
-		Command(std::string str, int level=0, int type=0, Function* func=NULL);
+		Command(int level=0, int type=0, Function* func=NULL);
 		void display(int x, int y);
 		void implement();
 	private:
@@ -37,7 +35,6 @@ class Command{
 		int type;
 		Function* func;
 	protected:
-		std::string str;
 
 };
 
