@@ -1,8 +1,9 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-#include <vector>
 #include <iostream>
+#include <vector>
+#include <string>
 
 #define	NORMAL 0
 #define	IF 1
@@ -18,6 +19,7 @@ class Function{
 		~Function();
 		virtual void display(int x, int y)=0;
 		virtual void implement()=0;
+		std::string name;
 	private:
 
 	protected:

@@ -28,11 +28,11 @@ void drawStackSquare();
 // }
 
 
-void RenderString(int x, int y, const std::string &string){
-	glColor3d(1.0, 0.0, 0.0);
+void RenderString(int x, int y, const std::string &string, void* font=GLUT_BITMAP_TIMES_ROMAN_24){
+	// glColor3d(1.0, 0.0, 0.0);
 	glRasterPos2f(x,y);
 	for(uint n=0; n<string.size(); n++){
-		glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, string[n]);
+		glutBitmapCharacter(font, string[n]);
 	}
 }
 
@@ -111,7 +111,7 @@ void init(void){
 	heap->add_Variable( new Variable<int>("int3",50) );
 	heap->add_Variable( new Variable<int>("int3",40) );
 	heap->add_Variable( new Variable<int>("int3",30) );
-	heap->add_Variable( new Variable<int>("int3",20) );
+	heap->add_Variable( new Variable<double>("wow_a_double",2.718) );
 	heap->add_Variable( new Variable<int>("int4",10) );
 	global = new NameSpace(); 
 	global->add_Variable( new Variable<bool>("true",true) );
@@ -129,18 +129,17 @@ void init(void){
 	global->add_Variable( new Variable<bool>("false2",false) );
 	global->add_Variable( new Variable<bool>("false2",false) );
 	global->add_Variable( new Variable<bool>("false2",false) );
-	
 
 	PipeLine::active_pipeline = new PipeLine();
 	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined2()) );
-	PipeLine::active_pipeline->add_Command( new Command(0,1,new user_defined3()) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(0,1,new user_defined1()) );
 	PipeLine::active_pipeline->add_Command( new Command(1,3) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined4()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined5()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined6()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
 	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined7()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined8()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
 	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined9()) );
 	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined10(1,2,3)) );
 	PipeLine::active_pipeline->add_Command( new Command(1,4) );
@@ -183,8 +182,8 @@ void display(void){
 		}
 
 		PipeLine::active_pipeline->display();
-		string test("heeeeyoooo");
-		RenderString(500,500,test);
+		// string test("heeeeyoooo");
+		// RenderString(500,500,test);
 	glPopMatrix();
 	glFlush();
 	/*

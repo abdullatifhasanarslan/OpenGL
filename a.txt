@@ -5,3 +5,14 @@ implement commands. Now those commands should be an actual thing.
 
 Also I have to figure out fonts. Because now there should write something so
 it can actually look cool and worthful :D
+
+
+Incomplete variable operations will be handled
+variable display and command display will be handled
+arrays will be handled
+pointers will be handled
+structs will be handled
+animations will be handled
+functions with parameters will be handled
+
+COMPILER

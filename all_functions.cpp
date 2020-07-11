@@ -7,37 +7,23 @@ using namespace std;
 
 extern int Width;
 extern int Height;
-
+extern void RenderString(int x, int y, const std::string &string, void* font=GLUT_BITMAP_TIMES_ROMAN_24);
 //---------------------------------------------------------
 
 user_defined1::user_defined1(){
-
+	this->name="user_defined1";
 }
 
 void user_defined1::display(int x, int y){
 	glPushMatrix();
-		glPolygonMode(GL_FRONT, GL_FILL);
-		glColor3f(0.1, 0.0, 0.0);
-		glBegin(GL_POLYGON);
-			glVertex2d(x,Height-y-10);
-			glVertex2d(x,Height-y-20);
-			glVertex2d(x+200,Height-y-20);
-			glVertex2d(x+200,Height-y-10);
-		glEnd();
-		glColor3f(0.0, 0.0, 0.1);
-		glBegin(GL_POLYGON);
-			glVertex2d(x,Height-y-20);
-			glVertex2d(x,Height-y-30);
-			glVertex2d(x+200,Height-y-30);
-			glVertex2d(x+200,Height-y-20);
-		glEnd();
-		glColor3f(0.0, 0.0, 0.0);
-		glBegin(GL_POLYGON);
-			glVertex2d(x,Height-y-30);
-			glVertex2d(x,Height-y-40);
-			glVertex2d(x+200,Height-y-40);
-			glVertex2d(x+200,Height-y-30);
-		glEnd();
+		glColor3f(0.5, 0.5, 1.0);
+		string text = this->name+"(";
+		RenderString(x,Height-(y+24),text);
+		
+		// Additional work if there are parameters
+		// glColor3f(0.87, 0.87, 0.87);
+		// text=param1->name, param2->name...
+		// RenderString(this->x,Height-(this->y+12),text);
 	glPopMatrix();
 }
 

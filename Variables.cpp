@@ -3,6 +3,7 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <vector>
+#include <string.h>
 
 using namespace std;
 extern GLubyte fly[];
@@ -10,6 +11,8 @@ extern GLubyte halftone[];
 extern GLubyte something[];
 extern int Width;
 extern int Height;
+extern void RenderString(int x, int y, const std::string &string, void* font=GLUT_BITMAP_TIMES_ROMAN_24);
+
 entity::entity(){
 	// this->X=x;
 	// this->Y=y;
@@ -109,17 +112,11 @@ void Variable<Type>::display(int x, int y){
 	this->x=x;
 	this->y=y;
 	glPushMatrix();
-		glEnable(GL_POLYGON_STIPPLE);
-		glPolygonMode(GL_FRONT, GL_FILL);
-		glPolygonStipple(fly);
 		glColor3f(0.4, 0.4, 1.0);
-		glBegin(GL_POLYGON);
-			glVertex2d(this->x,Height-(this->y));
-			glVertex2d(this->x,Height-(this->y+this->height));
-			glVertex2d(this->x+this->width,Height-(this->y+this->height));
-			glVertex2d(this->x+this->width,Height-(this->y));
-		glEnd();
-		glDisable(GL_POLYGON_STIPPLE);
+		string text = std::to_string(this->value);
+		RenderString(this->x,Height-(this->y),text);
+		text=this->name+"="+text;
+		RenderString(this->x,Height-(this->y+12),text,GLUT_BITMAP_HELVETICA_12);
 	glPopMatrix();
 }
 
@@ -128,17 +125,11 @@ void Variable<char>::display(int x, int y){
 	this->x=x;
 	this->y=y;
 	glPushMatrix();
-		glEnable(GL_POLYGON_STIPPLE);
-		glPolygonMode(GL_FRONT, GL_FILL);
-		glPolygonStipple(something);
 		glColor3f(0.7, 0.7, 0.0);
-		glBegin(GL_POLYGON);
-			glVertex2d(this->x,Height-(this->y));
-			glVertex2d(this->x,Height-(this->y+this->height));
-			glVertex2d(this->x+this->width,Height-(this->y+this->height));
-			glVertex2d(this->x+this->width,Height-(this->y));
-		glEnd();
-		glDisable(GL_POLYGON_STIPPLE);
+		string text(1,this->value);
+		RenderString(this->x,Height-(this->y),text);
+		text=this->name+"="+text;
+		RenderString(this->x,Height-(this->y+12),text,GLUT_BITMAP_HELVETICA_12);
 	glPopMatrix();
 }
 
@@ -147,14 +138,12 @@ void Variable<bool>::display(int x, int y){
 	this->x=x;
 	this->y=y;
 	glPushMatrix();
-		glPolygonMode(GL_FRONT, GL_FILL);
 		(this->value ? glColor3f(0.0, 0.7, 0.0) : glColor3f(0.7, 0.0, 0.0));
-		glBegin(GL_POLYGON);
-			glVertex2d(this->x,Height-(this->y));
-			glVertex2d(this->x,Height-(this->y+this->height));
-			glVertex2d(this->x+this->width,Height-(this->y+this->height));
-			glVertex2d(this->x+this->width,Height-(this->y));
-		glEnd();
+		string text = this->value ? "true" : "false";
+		RenderString(this->x,Height-(this->y),text);
+		text=this->name+"="+text;
+		RenderString(this->x,Height-(this->y+12),text,GLUT_BITMAP_HELVETICA_12);
+		
 	glPopMatrix();
 }
 

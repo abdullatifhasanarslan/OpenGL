@@ -8,7 +8,7 @@ using namespace std;
 
 extern int Width;
 extern int Height;
-
+extern void RenderString(int x, int y, const std::string &string, void* font=GLUT_BITMAP_TIMES_ROMAN_24);
 
 
 //---------------------------------------------------------

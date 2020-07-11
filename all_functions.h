@@ -2,12 +2,13 @@
 #define ALL_FUNCTIONS_H
 #include "Functions.h"
 
-
+//FUNCTIONS ARE DECLARED HERE
 class user_defined1 : public Function{
 	public:
 		user_defined1();
 		void display(int x, int y);
 		void implement();		
+		
 };
 
 class user_defined2 : public Function{
