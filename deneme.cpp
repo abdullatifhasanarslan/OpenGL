@@ -93,7 +93,10 @@ void init(void){
 	// heap->add_Variable( new Variable<int>("",200) );
 	// global = new NameSpace(); 
 	// global->add_Variable( new Variable<int>("",100) );
+	Variable<int>* deneme = new Variable<int>("int1",200);
 	active_stack = new NameSpace();
+	active_stack->add_Variable( deneme );
+	active_stack->add_Variable( new Variable<Variable<int>*>("pointer", deneme) );
 	active_stack->add_Variable( new Variable<char>("character",'a') );
 	active_stack->add_Variable( new Variable<char>("char2",'2') );
 	active_stack->add_Variable( new Variable<char>("char3",'3') );
@@ -103,7 +106,7 @@ void init(void){
 	active_stack->add_Variable( new Variable<char>("char4",'4') );
 	active_stack->add_Variable( new Variable<char>("char4",'4') );
 	heap = new NameSpace();
-	heap->add_Variable( new Variable<int>("int1",200) );
+	heap->add_Variable( new Variable<int>("int",200) );
 	heap->add_Variable( new Variable<int>("int2",150) );
 	heap->add_Variable( new Variable<int>("int3",100) );
 	heap->add_Variable( new Variable<int>("int3",75) );

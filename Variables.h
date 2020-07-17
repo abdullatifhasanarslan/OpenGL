@@ -23,10 +23,10 @@ class entity{
 		//static void reset_last_pose(int new_last_pose);
 	
 		virtual void display(int x, int y) = 0;
-	private:
-	protected:
 		int X, Y, WIDTH, HEIGHT;
 		int x, y, width, height;
+	private:
+	protected:
 };
 template <class Type>
 class Variable : public entity {
@@ -74,12 +74,12 @@ class Variable : public entity {
 		//Variable<Type> operator++(int);								//post-increment:	a++
 		//Variable<Type> operator--(int);								//post-decrement:	a--
 		//member access--------------------------------------------------------------------------
+		Variable<Type>& operator*();									//indirection:		*a
+		Variable<Type>& operator&();									//addressof:		&a
+		Variable<Type>& operator->();									//memberofpointer:	a->b
 		/*
 		template <class ReType, class InType>
 		Variable<ReType>& operator[](InType index);						//subscript:		a[b]
-		Variable<ReType>& operator*();									//indirection:		*a
-		Variable<ReType>& operator&();									//addressof:		&a
-		Variable<ReType>& operator->();									//memberofpointer:	a->b
 		Variable<ReType>& operator->*();									//post-decrement:	a--
 		*/
 		~Variable();

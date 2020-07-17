@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <vector>
 #include <string.h>
+#include "utility.h"
 
 using namespace std;
 extern GLubyte fly[];
@@ -100,6 +101,12 @@ Variable<double>::Variable(std::string name, double value){
 	this->value=value;
 	this->setSize(value,50);
 }
+template <>
+Variable<Variable<int>*>::Variable(std::string name, Variable<int>* value){
+	this->name=name;
+	this->value=value;
+	this->setSize(12,50);
+}
 template <class Type>
 Variable<Type>::Variable(const Variable<Type> &object){
 	this->name="<blank>";
@@ -144,6 +151,20 @@ void Variable<bool>::display(int x, int y){
 		text=this->name+"="+text;
 		RenderString(this->x,Height-(this->y+12),text,GLUT_BITMAP_HELVETICA_12);
 		
+	glPopMatrix();
+}
+
+template <>
+void Variable<Variable<int>*>::display(int x, int y){
+	this->x=x;
+	this->y=y;
+	glPushMatrix();
+		glColor3f(0.0, 0.0, 0.0);
+		string text = "*";
+		RenderString(this->x,Height-(this->y),text);
+		Line(this->x,Height-(this->y),this->value->x,Height-(this->value->y));
+		text=this->name+"=&"+this->value->name;
+		RenderString(this->x,Height-(this->y+12),text,GLUT_BITMAP_HELVETICA_12);		
 	glPopMatrix();
 }
 
@@ -348,12 +369,19 @@ Variable<Type> Variable<Type>::operator--(int){
 */
 //member access--------------------------------------------------------------------------
 /*
+template <class Type>
+Variable<Variable<Type>*>& operator*(){
+	return this->value->value;
+}
+Variable<Variable<Type>*>& operator&(){
+	return this;
+}
+Variable<Variable<Type>*>& operator->(){
+	return this;
+}
+Variable<ReType>& operator->*();								//pointomemofpoint:	a->*b
 template <class ReType, class InType>
 Variable<ReType>& operator[](InType index);						//subscript:		a[b]
-Variable<ReType>& operator*();									//indirection:		*a
-Variable<ReType>& operator&();									//addressof:		&a
-Variable<ReType>& operator->();									//memberofpointer:	a->b
-Variable<ReType>& operator->*();								//pointomemofpoint:	a->*b
 */
 
 template <class Type>

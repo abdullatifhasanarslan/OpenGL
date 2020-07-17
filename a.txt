@@ -14,5 +14,7 @@ pointers will be handled
 structs will be handled
 animations will be handled
 functions with parameters will be handled
+loops will be reworked
+
 
 COMPILER
