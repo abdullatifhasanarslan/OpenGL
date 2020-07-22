@@ -114,7 +114,13 @@ void Command::implement(){
 //---------------------------------------------------------
 
 PipeLine::PipeLine(){
+	this->current=0;
 	this->parent=NULL;
+}
+PipeLine::PipeLine(PipeLine* parent){
+	this->current=0;
+	this->parent=parent;
+	// PipeLine::active_pipeline=this;
 }
 
 void PipeLine::display(){
@@ -131,4 +137,17 @@ void PipeLine::display(){
 
 void PipeLine::add_Command(Command* command){
 	this->commands.push_back(command);
+}
+
+void PipeLine::step(){
+	this->commands[current]->implement();
+	if(++this->current==this->commands.size()){
+		if(this->parent!=NULL){
+			PipeLine::active_pipeline=this->parent;
+			//destroy this
+		} else {
+			cout<<"Program should be terminated but restarts instead"<<endl;
+			this->current=0;
+		}
+	}
 }

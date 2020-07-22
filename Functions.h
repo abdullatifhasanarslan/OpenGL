@@ -44,13 +44,15 @@ class Command{
 class PipeLine{
 	public:
 		PipeLine();
+		PipeLine(PipeLine* parent);
 		void display();
 		void add_Command(Command* command);
+		void step();
 		std::vector<Command*> commands;
 		PipeLine* parent;
 		static PipeLine* active_pipeline;
 	private:
-		
+		unsigned int current;
 	protected:
 		
 };

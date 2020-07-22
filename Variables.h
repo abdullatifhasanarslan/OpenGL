@@ -117,12 +117,14 @@ class Variable : public entity {
 class NameSpace{
 	public:
 		NameSpace();
+		NameSpace(NameSpace* parent);
 		~NameSpace();
 		entity* get_Variable(const std::string name);
 		void add_Variable(entity* variable);
 		friend std::ostream& operator<<(std::ostream& out, const NameSpace& name_space);
 		std::map<std::string,entity*> names;
 		std::vector<entity*> ordered;
+		static NameSpace* active_stack;
 	private:
 		NameSpace* parent;
 	protected:

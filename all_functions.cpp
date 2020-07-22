@@ -1,4 +1,5 @@
 #include "all_functions.h"
+#include "Variables.h"
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <iostream>
@@ -17,53 +18,63 @@ user_defined1::user_defined1(){
 void user_defined1::display(int x, int y){
 	glPushMatrix();
 		glColor3f(0.5, 0.5, 1.0);
-		string text = this->name+"(";
+		string text = this->name+"()";
 		RenderString(x,Height-(y+24),text);
 		
 		// Additional work if there are parameters
 		// glColor3f(0.87, 0.87, 0.87);
 		// text=param1->name, param2->name...
 		// RenderString(this->x,Height-(this->y+12),text);
+		
+		// glColor3f(0.5, 0.5, 1.0);
+		// text = ")";
+		// RenderString(x,Height-(y+24),text);
+		
 	glPopMatrix();
 }
 
 void user_defined1::implement(){
+	this->name=this->name+"----done";
+	this->display(this->x,this->y);
+	glutPostRedisplay();
+	glFlush();
 }
 
 //---------------------------------------------------------
 
 user_defined2::user_defined2(){
+	this->name="user_defined2";
 }
 
 void user_defined2::display(int x, int y){
 	glPushMatrix();
-		glPolygonMode(GL_FRONT, GL_FILL);
-		glColor3f(0.2, 0.0, 0.0);
-		glBegin(GL_POLYGON);
-			glVertex2d(x,Height-y-10);
-			glVertex2d(x,Height-y-20);
-			glVertex2d(x+200,Height-y-20);
-			glVertex2d(x+200,Height-y-10);
-		glEnd();
-		glColor3f(0.0, 0.0, 0.2);
-		glBegin(GL_POLYGON);
-			glVertex2d(x,Height-y-20);
-			glVertex2d(x,Height-y-30);
-			glVertex2d(x+200,Height-y-30);
-			glVertex2d(x+200,Height-y-20);
-		glEnd();
-		glColor3f(0.0, 0.0, 0.0);
-		glBegin(GL_POLYGON);
-			glVertex2d(x,Height-y-30);
-			glVertex2d(x,Height-y-40);
-			glVertex2d(x+200,Height-y-40);
-			glVertex2d(x+200,Height-y-30);
-		glEnd();
+		glColor3f(0.5, 0.5, 1.0);
+		string text = this->name+"()";
+		RenderString(x,Height-(y+24),text);
+		
+		// Additional work if there are parameters
+		// glColor3f(0.87, 0.87, 0.87);
+		// text=param1->name, param2->name...
+		// RenderString(this->x,Height-(this->y+12),text);
+		
+		// glColor3f(0.5, 0.5, 1.0);
+		// text = ")";
+		// RenderString(x,Height-(y+24),text);
+		
 	glPopMatrix();
 }
 
 void user_defined2::implement(){
-	
+	NameSpace::active_stack=new NameSpace(NameSpace::active_stack);
+	NameSpace::active_stack->add_Variable( new Variable<int>("i",0) );
+	NameSpace::active_stack->add_Variable( new Variable<int>("a",15) );
+	NameSpace::active_stack->add_Variable( new Variable<int>("b",20) );
+	PipeLine::active_pipeline = new PipeLine(PipeLine::active_pipeline);
+	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(0,1,new user_defined1()) );
+	glutPostRedisplay();
+	glFlush();
 }
 
 //---------------------------------------------------------
@@ -360,29 +371,6 @@ void user_defined10::implement(){
 	this->r=this->g;
 	this->g=this->b;
 	this->b=temp;
-	glPushMatrix();
-		glPolygonMode(GL_FRONT, GL_FILL);
-		glColor3f(this->r/10.0, 0.0, 0.0);
-		glBegin(GL_POLYGON);
-			glVertex2d(this->x,Height-this->y-10);
-			glVertex2d(this->x,Height-this->y-20);
-			glVertex2d(this->x+200,Height-this->y-20);
-			glVertex2d(this->x+200,Height-this->y-10);
-		glEnd();
-		glColor3f(0.0, this->g/10.0, 0.0);
-		glBegin(GL_POLYGON);
-			glVertex2d(this->x,Height-this->y-20);
-			glVertex2d(this->x,Height-this->y-30);
-			glVertex2d(this->x+200,Height-this->y-30);
-			glVertex2d(this->x+200,Height-this->y-20);
-		glEnd();
-		glColor3f(0.0, 0.0, this->b/10.0);
-		glBegin(GL_POLYGON);
-			glVertex2d(this->x,Height-this->y-30);
-			glVertex2d(this->x,Height-this->y-40);
-			glVertex2d(this->x+200,Height-this->y-40);
-			glVertex2d(this->x+200,Height-this->y-30);
-		glEnd();
-	glPopMatrix();
+	this->display(this->x,this->y);
 	glFlush();
 }

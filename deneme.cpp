@@ -44,10 +44,11 @@ int Width = 1920;
 int Height = 1080;
 const char* WindowName = "deneme";
 
-NameSpace* active_stack;
+// NameSpace* active_stack;
 NameSpace* heap;
 NameSpace* global; 
 PipeLine* PipeLine::active_pipeline;
+NameSpace* NameSpace::active_stack;
 /*
  *	Request double buffer display mode.
  *	Register mouse input callback functions
@@ -94,17 +95,33 @@ void init(void){
 	// global = new NameSpace(); 
 	// global->add_Variable( new Variable<int>("",100) );
 	Variable<int>* deneme = new Variable<int>("int1",200);
-	active_stack = new NameSpace();
-	active_stack->add_Variable( deneme );
-	active_stack->add_Variable( new Variable<Variable<int>*>("pointer", deneme) );
-	active_stack->add_Variable( new Variable<char>("character",'a') );
-	active_stack->add_Variable( new Variable<char>("char2",'2') );
-	active_stack->add_Variable( new Variable<char>("char3",'3') );
-	active_stack->add_Variable( new Variable<char>("char4",'4') );
-	active_stack->add_Variable( new Variable<char>("char4",'4') );
-	active_stack->add_Variable( new Variable<char>("char4",'4') );
-	active_stack->add_Variable( new Variable<char>("char4",'4') );
-	active_stack->add_Variable( new Variable<char>("char4",'4') );
+	NameSpace::active_stack = new NameSpace();
+	NameSpace::active_stack->add_Variable( deneme );
+	NameSpace::active_stack->add_Variable( new Variable<Variable<int>*>("pointer", deneme) );
+	NameSpace::active_stack->add_Variable( new Variable<char>("character",'a') );
+	NameSpace::active_stack->add_Variable( new Variable<char>("char2",'2') );
+	NameSpace::active_stack->add_Variable( new Variable<char>("char3",'3') );
+	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
+	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
+	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
+	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
+	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
+	PipeLine::active_pipeline = new PipeLine();
+	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined2()) );
+	PipeLine::active_pipeline->add_Command( new Command(0,1,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,3) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined7()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined9()) );
+	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined10(1,2,3)) );
+	PipeLine::active_pipeline->add_Command( new Command(1,4) );
+	PipeLine::active_pipeline->add_Command( new Command(0,2) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined10(4,5,6)) );
+	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined10(7,8,9)) );
 	heap = new NameSpace();
 	heap->add_Variable( new Variable<int>("int",200) );
 	heap->add_Variable( new Variable<int>("int2",150) );
@@ -133,22 +150,6 @@ void init(void){
 	global->add_Variable( new Variable<bool>("false2",false) );
 	global->add_Variable( new Variable<bool>("false2",false) );
 
-	PipeLine::active_pipeline = new PipeLine();
-	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(0,1,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,3) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined7()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined9()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined10(1,2,3)) );
-	PipeLine::active_pipeline->add_Command( new Command(1,4) );
-	PipeLine::active_pipeline->add_Command( new Command(0,2) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined10(4,5,6)) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined10(7,8,9)) );
 }
 
 void display(void){
@@ -164,10 +165,10 @@ void display(void){
 		drawStackSquare();
 		//drawing stack
 		int last_pose=225;
-		int size = active_stack->ordered.size();
+		int size = NameSpace::active_stack->ordered.size();
 		for(int i=0; i<size; i++){
-			active_stack->ordered[i]->display(375,last_pose);
-			last_pose+=active_stack->ordered[i]->getheight()+30;
+			NameSpace::active_stack->ordered[i]->display(375,last_pose);
+			last_pose+=NameSpace::active_stack->ordered[i]->getheight()+30;
 		}
 		//drawing heap
 		last_pose=225;

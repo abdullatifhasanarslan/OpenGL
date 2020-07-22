@@ -154,19 +154,43 @@ void Variable<bool>::display(int x, int y){
 	glPopMatrix();
 }
 
+
+//pointer
 template <>
 void Variable<Variable<int>*>::display(int x, int y){
 	this->x=x;
 	this->y=y;
 	glPushMatrix();
-		glColor3f(0.0, 0.0, 0.0);
+		glColor3f(0.8, 0.4, 0.0);
+		glLineWidth(2.0);
 		string text = "*";
 		RenderString(this->x,Height-(this->y),text);
-		Line(this->x,Height-(this->y),this->value->x,Height-(this->value->y));
 		text=this->name+"=&"+this->value->name;
 		RenderString(this->x,Height-(this->y+12),text,GLUT_BITMAP_HELVETICA_12);		
+		glLineWidth(1.0);
+		Line(this->x,Height-(this->y),this->value->x,Height-(this->value->y));
 	glPopMatrix();
 }
+
+//array
+
+// template <>
+// void Variable<Variable<int>[]>::display(int x, int y){
+// 	this->x=x;
+// 	this->y=y;
+// 	glPushMatrix();
+// 		glColor3f(0.8, 0.4, 0.0);
+// 		glLineWidth(2.0);
+// 		string text = "*";
+// 		RenderString(this->x,Height-(this->y),text);
+// 		text=this->name+"=&"+this->value->name;
+// 		RenderString(this->x,Height-(this->y+12),text,GLUT_BITMAP_HELVETICA_12);		
+// 		glLineWidth(1.0);
+// 		Line(this->x,Height-(this->y),this->value->x,Height-(this->value->y));
+// 	glPopMatrix();
+// }
+
+//structs should be defined here
 
 //assignment-----------------------------------------------------------------------------
 template <class Type>
@@ -397,7 +421,11 @@ template class Variable<bool>;
 
 //---------------------------------------------------------------------------------------
 NameSpace::NameSpace(){
+	this->parent=NULL;
+}
 
+NameSpace::NameSpace(NameSpace* parent){
+	this->parent=parent;
 }
 
 NameSpace::~NameSpace(){

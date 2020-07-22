@@ -32,18 +32,13 @@ void reshape(int w, int h){
 }
 
 void keyPressed(unsigned char key, int x, int y){
-	int size;
 	switch(key){
 		case 27:
 			cout << "Terminating---------" << endl;
 			exit (0);
 			break;
 		case 13:
-			size=PipeLine::active_pipeline->commands.size();
-			if(++current==size){
-				current=0;
-			}
-			PipeLine::active_pipeline->commands[current]->implement();
+			PipeLine::active_pipeline->step();
 			break;
 		case 32:
 			viewX=0;
@@ -111,23 +106,23 @@ void mousePressed(int button, int state, int x, int y){
 }
 void mouseDragged(int x, int y){
 	//Gives current coordinates
-	cout << x << "," << y << endl;
-	int X=viewX+(x/scale);
-	int Y=(y/scale)-((Height/scale)-Height)-viewY;
-	cout << X << "," << Y << endl; 
-	entity* current;
-	int size = active_stack->ordered.size();
-	for(int i=0;i<size;i++){
-		current=active_stack->ordered[i];
-		if(current->checkCollision(X,Y)){
-			cout << "COLLISION" << endl;
-			// current->setPose(current->x+(X-postX),current->y+(Y-postY));
-		}
-	}
-	cout << endl << endl;
-	postX=viewX+(x/scale);
-	postY=(y/scale)-((Height/scale)-Height)-viewY;
-	glutPostRedisplay();
+	// cout << x << "," << y << endl;
+	// int X=viewX+(x/scale);
+	// int Y=(y/scale)-((Height/scale)-Height)-viewY;
+	// cout << X << "," << Y << endl; 
+	// entity* current;
+	// int size = active_stack->ordered.size();
+	// for(int i=0;i<size;i++){
+	// 	current=active_stack->ordered[i];
+	// 	if(current->checkCollision(X,Y)){
+	// 		cout << "COLLISION" << endl;
+	// 		// current->setPose(current->x+(X-postX),current->y+(Y-postY));
+	// 	}
+	// }
+	// cout << endl << endl;
+	// postX=viewX+(x/scale);
+	// postY=(y/scale)-((Height/scale)-Height)-viewY;
+	// glutPostRedisplay();
 }
 void IDLE(){
 	//Works if no other event exist
