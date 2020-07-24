@@ -33,6 +33,7 @@ class Variable : public entity {
 	//static int last_pos=0;
 	public:
 		Type value;
+		Variable();
 		Variable(std::string name, Type value);
 		Variable(const Variable<Type> &object);	//copy constructor
 		void display(int x, int y);
@@ -91,6 +92,23 @@ class Variable : public entity {
 	protected:
 	
 };
+
+template <class Type>
+class Array : public entity {
+	public:
+		Variable<Type>* value;
+		Array(std::string name, Type* value, int length);
+		void display(int x, int y);
+		Variable<Type>& operator[](int index);						//subscript:		a[b]
+		~Array();
+	private:
+		int length;
+		//int X, Y;
+		//int WIDTH, HEIGHT;
+	protected:
+	
+};
+
 //char character='a';
 //character='a';
 //char character1=character2;
@@ -114,6 +132,8 @@ class Variable : public entity {
 //number1==number2;
 //number1 +,-,*,/,= number,variable
 
+
+
 class NameSpace{
 	public:
 		NameSpace();
@@ -125,6 +145,7 @@ class NameSpace{
 		std::map<std::string,entity*> names;
 		std::vector<entity*> ordered;
 		static NameSpace* active_stack;
+		NameSpace* get_parent();
 	private:
 		NameSpace* parent;
 	protected:

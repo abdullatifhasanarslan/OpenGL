@@ -65,6 +65,12 @@ int entity::getheight(){
 }
 
 //-----------------------------------------------------------
+
+template <class Type>
+Variable<Type>::Variable(){
+	this->setSize(200,50);
+}
+
 template <class Type>
 Variable<Type>::Variable(std::string name, Type value){
 	this->name=name;
@@ -112,6 +118,17 @@ Variable<Type>::Variable(const Variable<Type> &object){
 	this->name="<blank>";
 	this->value=object.value;
 	this->setSize(object.width,object.height);
+}
+
+template <class Type>
+Array<Type>::Array(std::string name, Type* value, int length){
+	this->length=length;
+	this->name=name;
+	this->value = new Variable<Type>[this->length];
+	for(int i=0;i<length;i++){
+		this->value[i].value=value[i];
+	}
+	this->setSize(25,50);
 }
 
 template <class Type>
@@ -174,21 +191,27 @@ void Variable<Variable<int>*>::display(int x, int y){
 
 //array
 
-// template <>
-// void Variable<Variable<int>[]>::display(int x, int y){
-// 	this->x=x;
-// 	this->y=y;
-// 	glPushMatrix();
-// 		glColor3f(0.8, 0.4, 0.0);
-// 		glLineWidth(2.0);
-// 		string text = "*";
-// 		RenderString(this->x,Height-(this->y),text);
-// 		text=this->name+"=&"+this->value->name;
-// 		RenderString(this->x,Height-(this->y+12),text,GLUT_BITMAP_HELVETICA_12);		
-// 		glLineWidth(1.0);
-// 		Line(this->x,Height-(this->y),this->value->x,Height-(this->value->y));
-// 	glPopMatrix();
-// }
+template <class Type>
+void Array<Type>::display(int x, int y){
+	this->x=x;
+	this->y=y;
+	int font_height=24;
+	int element_height=this->value[0].getheight();
+	int last_pose=y;
+	glPushMatrix();
+
+		glLineWidth(1.0);
+		for(int i=0;i<this->length;i++){
+			Line(this->x-10,Height-(last_pose-element_height),this->x+30,Height-(last_pose-element_height));
+			Line(this->x-10,Height-(last_pose-element_height),this->x-10,Height-(last_pose+font_height));
+			Line(this->x-10,Height-(last_pose+font_height),this->x+30,Height-(last_pose+font_height));
+			this->value[i].display(x,last_pose);
+			last_pose+=element_height+font_height;
+		}
+		last_pose-=element_height;
+
+	glPopMatrix();
+}
 
 //structs should be defined here
 
@@ -391,15 +414,22 @@ Variable<Type> Variable<Type>::operator--(int){
 	return Variable<Type>("<blank>",--this->value);
 }
 */
-//member access--------------------------------------------------------------------------
+//member accss--------------------------------------------------------------------------
+template <class Type>
+Variable<Type>& Array<Type>::operator[](int index){
+	return this->value[index];
+}
 /*
 template <class Type>
-Variable<Variable<Type>*>& operator*(){
+Variable<Variable<Type>*>& Variable<Variable<Type>*>::operator*(){
 	return this->value->value;
 }
-Variable<Variable<Type>*>& operator&(){
+template <class Type>
+Variable<Variable<Type>*>& Variable<Variable<Type>*>::operator&(){
 	return this;
 }
+*/
+/*
 Variable<Variable<Type>*>& operator->(){
 	return this;
 }
@@ -412,11 +442,16 @@ template <class Type>
 Variable<Type>::~Variable(){
 
 }
+template <class Type>
+Array<Type>::~Array(){
+	delete[] this->value;
+}
 template class Variable<char>;
 template class Variable<double>;
 template class Variable<float>;
 template class Variable<int>;
 template class Variable<bool>;
+template class Array<int>;
 //template class Variable<void*>;
 
 //---------------------------------------------------------------------------------------
@@ -434,6 +469,10 @@ NameSpace::~NameSpace(){
 
 entity* NameSpace::get_Variable(const std::string name){
 	return NULL;
+}
+
+NameSpace* NameSpace::get_parent(){
+	return this->parent;
 }
 
 void NameSpace::add_Variable(entity*  variable){

@@ -64,11 +64,14 @@ void user_defined2::display(int x, int y){
 	glPopMatrix();
 }
 
+#define ARR_SIZE 5
 void user_defined2::implement(){
+	int deneme[ARR_SIZE]={1,2,3,4,5};
 	NameSpace::active_stack=new NameSpace(NameSpace::active_stack);
 	NameSpace::active_stack->add_Variable( new Variable<int>("i",0) );
 	NameSpace::active_stack->add_Variable( new Variable<int>("a",15) );
 	NameSpace::active_stack->add_Variable( new Variable<int>("b",20) );
+	NameSpace::active_stack->add_Variable( new Array<int>("deneme",deneme,ARR_SIZE) );
 	PipeLine::active_pipeline = new PipeLine(PipeLine::active_pipeline);
 	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined1()) );
 	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined1()) );

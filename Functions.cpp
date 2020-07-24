@@ -144,6 +144,7 @@ void PipeLine::step(){
 	if(++this->current==this->commands.size()){
 		if(this->parent!=NULL){
 			PipeLine::active_pipeline=this->parent;
+			NameSpace::active_stack=NameSpace::active_stack->get_parent();
 			//destroy this
 		} else {
 			cout<<"Program should be terminated but restarts instead"<<endl;
