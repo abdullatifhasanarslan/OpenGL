@@ -27,6 +27,7 @@ Command::Command(int level, int type, Function* func){
 	this->level=level;
 	this->type=type;
 	this->func=func;
+	this->active=true;
 }
 
 void Command::display(int x, int y){
@@ -58,6 +59,8 @@ void Command::display(int x, int y){
 				Line(x+30,Height-y,x+30,Height-y-50);
 				break;
 			case IF:
+			case ELSE_IF:
+			case WHILE:
 				//left and right
 				glLineStipple(1, 0xFFFF);
 				Line(x,Height-y,x,Height-y-50);
@@ -89,6 +92,7 @@ void Command::display(int x, int y){
 				Line(x,Height-y-50,x+30,Height-y-50);
 				break;
 			case CLOSE_SCOPE:
+			case CLOSE_LOOP_SCOPE:
 				glLineStipple(1, 0xFFFF);
 				//cross
 				Line(x+60,Height-y,x,Height-y-50);
@@ -110,6 +114,20 @@ void Command::implement(){
 		this->func->implement();
 	}
 }
+
+int Command::get_type(){
+	return this->type;
+}
+
+int Command::get_level(){
+	return this->level;
+}
+
+bool Command::is_active(){
+	this->active=this->func->result;
+	return this->active;
+}
+
 
 //---------------------------------------------------------
 
@@ -139,8 +157,67 @@ void PipeLine::add_Command(Command* command){
 	this->commands.push_back(command);
 }
 
+void PipeLine::come_back(int level){
+	while(this->commands[this->current]->get_type() != WHILE || this->commands[this->current]->get_level() != level){
+		//I could also check their type and reactivate if they are deactivated
+		//This is a nice thing to remember since I could also show commented commands
+		//Igmpring some details was waaaay more easy,
+		this->commands[this->current]->activate();
+	}
+	this->commands[this->current]->activate();
+	//step will increase 1
+	this->current--;
+}
+
+void Command::disable(){
+	this->active=false;
+}
+
+void Command::activate(){
+	this->active=true;
+}
+
+void PipeLine::skip(int level){
+	//skip current command and open_bracket
+	this->current+=2;
+	while(this->commands[this->current]->get_level()!=level){
+		this->current++;			
+	}
+	//step will skip close bracket
+}
+
+void PipeLine::disable_else(int level){
+	int i=this->current;
+	while( this->commands[i]->get_type() != ELSE || this->commands[i]->get_level() != level ){
+		if(this->commands[i]->get_type() == ELSE_IF ){
+			this->commands[i]->disable();
+		}		 
+		i++;
+	}
+	this->commands[i]->disable();
+}
+
 void PipeLine::step(){
-	this->commands[current]->implement();
+	this->commands[this->current]->implement(); //if it is conditional <active> should be determined inside
+	switch( this->commands[this->current]->get_type() ){
+		case IF:
+		case ELSE_IF:
+			if( this->commands[this->current]->is_active() ){
+				this->disable_else(this->commands[this->current]->get_level());
+			} else{
+				this->skip(this->commands[this->current]->get_level());
+			}
+			break;
+		case WHILE:
+		case ELSE:
+			if( ! this->commands[this->current]->is_active() ){
+				this->skip(this->commands[this->current]->get_level());
+			}
+		case CLOSE_LOOP_SCOPE:
+			this->come_back(this->commands[this->current]->get_level());
+		default:
+			break;
+	}
 	if(++this->current==this->commands.size()){
 		if(this->parent!=NULL){
 			PipeLine::active_pipeline=this->parent;
@@ -150,5 +227,9 @@ void PipeLine::step(){
 			cout<<"Program should be terminated but restarts instead"<<endl;
 			this->current=0;
 		}
+		// } else{
+		// 	cout<<"Execution finished"<<endl;
+		// 	exit(0);
+		// }
 	}
 }

@@ -7,9 +7,12 @@
 
 #define	NORMAL 0
 #define	IF 1
-#define	ELSE 2
-#define	OPEN_SCOPE 3
-#define	CLOSE_SCOPE 4
+#define	ELSE_IF 2
+#define	ELSE 3
+#define	WHILE 4
+#define	OPEN_SCOPE 5
+#define	CLOSE_SCOPE 6
+#define	CLOSE_LOOP_SCOPE 7
 
 
 
@@ -20,6 +23,7 @@ class Function{
 		virtual void display(int x, int y)=0;
 		virtual void implement()=0;
 		std::string name;
+		bool result;
 	private:
 
 	protected:
@@ -32,7 +36,13 @@ class Command{
 		Command(int level=0, int type=0, Function* func=NULL);
 		void display(int x, int y);
 		void implement();
+		int get_type();
+		int get_level();
+		bool is_active();
+		void disable();
+		void activate();
 	private:
+		bool active;
 		int level;
 		int type;
 		Function* func;
@@ -51,8 +61,12 @@ class PipeLine{
 		std::vector<Command*> commands;
 		PipeLine* parent;
 		static PipeLine* active_pipeline;
+		void come_back(int level);
+		void skip(int level);
+		void disable_else(int level);
 	private:
 		unsigned int current;
+		
 	protected:
 		
 };

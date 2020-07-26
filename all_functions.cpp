@@ -3,12 +3,77 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <iostream>
+#include <string>
+#include <string.h>
+#include <vector>
 
 using namespace std;
 
 extern int Width;
 extern int Height;
 extern void RenderString(int x, int y, const std::string &string, void* font=GLUT_BITMAP_TIMES_ROMAN_24);
+
+//---------------------------------------------------------
+
+template <class Type>
+assignment< Type >::assignment(std::string left_name, std::string right_name, Type* left, Type* right){
+	this->name = left_name + " = " + right_name;
+	this->left_name = left_name;
+	this->right_name = right_name;
+	this->left = left;
+	this->right = right;
+	this->result=true;
+}
+
+template <class Type>
+void assignment<Type>::display(int x, int y){
+	glPushMatrix();
+		glColor3f(0.5, 0.5, 1.0);
+		string text = this->name;
+		RenderString(x,Height-(y+24),text);
+	glPopMatrix();
+}
+template <class Type>
+void assignment<Type>::implement(){
+	this->left = this->right;
+	this->name=this->left_name + " = " + "error";//std::to_string(right->value);
+	this->display(this->x,this->y);
+	glutPostRedisplay();
+	glFlush();
+}
+
+template class assignment<Variable<int> >;
+
+//---------------------------------------------------------
+
+template <class Type>
+lessthan<Type>::lessthan(std::string left_name, std::string right_name, Type* left, Type* right){
+	this->name = left_name + " < " + right_name;
+	this->left_name = left_name;
+	this->right_name = right_name;
+	this->left = left;
+	this->right = right;
+	this->result=true;
+}
+
+template <class Type>
+void lessthan<Type>::display(int x, int y){
+	glPushMatrix();
+		glColor3f(0.5, 0.5, 1.0);
+		string text = this->name;
+		RenderString(x,Height-(y+24),text);
+	glPopMatrix();
+}
+template <class Type>
+void lessthan<Type>::implement(){
+	this->result = this->left < this->right ? true : false;
+	this->name=this->left_name + " < " + "error";//std::to_string(right->value);
+	this->display(this->x,this->y);
+	glutPostRedisplay();
+	glFlush();
+}
+
+template class lessthan<Variable<int> >;
 //---------------------------------------------------------
 
 user_defined1::user_defined1(){

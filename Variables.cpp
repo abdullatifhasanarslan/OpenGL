@@ -72,47 +72,18 @@ Variable<Type>::Variable(){
 }
 
 template <class Type>
+Variable<Type>::Variable(std::string name){
+	this->name=name;
+	this->setSize(200,50);
+}
+
+template <class Type>
 Variable<Type>::Variable(std::string name, Type value){
 	this->name=name;
 	this->value=value;
 	this->setSize(200,50);
 }
-template <>
-Variable<bool>::Variable(std::string name, bool value){
-	this->name=name;
-	this->value=value;
-	this->setSize(50,50);
-}
-template <>
-Variable<char>::Variable(std::string name, char value){
-	this->name=name;
-	this->value=value;
-	this->setSize(50,50);
-}
-template <>
-Variable<int>::Variable(std::string name, int value){
-	this->name=name;
-	this->value=value;
-	this->setSize(value,50);
-}
-template <>
-Variable<float>::Variable(std::string name, float value){
-	this->name=name;
-	this->value=value;
-	this->setSize(value,50);
-}
-template <>
-Variable<double>::Variable(std::string name, double value){
-	this->name=name;
-	this->value=value;
-	this->setSize(value,50);
-}
-template <>
-Variable<Variable<int>*>::Variable(std::string name, Variable<int>* value){
-	this->name=name;
-	this->value=value;
-	this->setSize(12,50);
-}
+
 template <class Type>
 Variable<Type>::Variable(const Variable<Type> &object){
 	this->name="<blank>";
@@ -216,6 +187,7 @@ void Array<Type>::display(int x, int y){
 //structs should be defined here
 
 //assignment-----------------------------------------------------------------------------
+
 template <class Type>
 Variable<Type>& Variable<Type>::operator=(const Variable<Type>& operand){
 	this->value=operand.value;

@@ -7,6 +7,14 @@
 								glVertex2f((x1),(y1));\
 								glVertex2f((x2),(y2));\
 							glEnd();
+
+#define Rectangle(x1,y1,x2,y2) 	glBegin(GL_POLYGON);\
+								glVertex2f((x1),(y1));\
+								glVertex2f((x2),(y1));\
+								glVertex2f((x2),(y2));\
+								glVertex2f((x1),(y2));\
+							glEnd();
+
 template <class T>
 std::ostream& operator<<(std::ostream& out, const Variable<T>& variable) {
     out << variable.name << "=" << variable.value;

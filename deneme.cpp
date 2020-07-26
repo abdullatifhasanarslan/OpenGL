@@ -9,7 +9,6 @@
 #include "Functions.h"
 #include "utility.h"
 #include "all_functions.h"
-
 using namespace std;
 
 //DRAW--------------------------
@@ -83,6 +82,38 @@ void init(void){
 	glShadeModel(GL_FLAT);
 	glEnable(GL_POLYGON_STIPPLE);
 
+	NameSpace::active_stack = new NameSpace();
+	int depth=0;
+	PipeLine::active_pipeline = new PipeLine();
+	heap = new NameSpace();
+	global = new NameSpace(); 
+	
+	//#define SIZE 10
+	#define SIZE 10
+	//int array[SIZE];
+	int array[SIZE];	
+	Array<int>* _array = new Array<int>("array", array, SIZE);
+	NameSpace::active_stack->add_Variable( _array );
+	//int i;
+	Variable<int>* _i = new Variable<int>("i");
+	NameSpace::active_stack->add_Variable( _i );
+	//i=0;
+	Variable<int>* deneme = new Variable<int>();
+	deneme->value=0;
+	cout << endl << endl << "Whyyyy" << endl << endl;
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("i", "0", _i, deneme) ) );
+	//while(i<SIZE)
+	Variable<int>* deneme2 = new Variable<int>();
+	deneme2->value=SIZE;
+	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, new lessthan< Variable<int> >("while(i",  "10)", _i, deneme2) ) );
+	//{
+	PipeLine::active_pipeline->add_Command( new Command(depth++, OPEN_SCOPE) );
+	//array[i] = factorial(i);
+	//PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("array[i]", "factorial(i)", _array[_i], deneme) ) );
+	//}
+	PipeLine::active_pipeline->add_Command( new Command(--depth, CLOSE_LOOP_SCOPE) );
+	//return EXIT_SUCCESS
+	
 	// active_stack = new NameSpace();
 	// active_stack->add_Variable( new Variable<char>("character",'a') );
 	// active_stack->add_Variable( new Variable<double>("double_number",31.4561234) );
@@ -94,6 +125,7 @@ void init(void){
 	// heap->add_Variable( new Variable<int>("",200) );
 	// global = new NameSpace(); 
 	// global->add_Variable( new Variable<int>("",100) );
+	/*
 	Variable<int>* deneme = new Variable<int>("int1",200);
 	NameSpace::active_stack = new NameSpace();
 	NameSpace::active_stack->add_Variable( deneme );
@@ -106,22 +138,23 @@ void init(void){
 	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
 	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
 	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
+	int depth=0;
 	PipeLine::active_pipeline = new PipeLine();
-	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined2()) );
-	PipeLine::active_pipeline->add_Command( new Command(0,1,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,3) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined7()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined9()) );
-	PipeLine::active_pipeline->add_Command( new Command(1,0,new user_defined10(1,2,3)) );
-	PipeLine::active_pipeline->add_Command( new Command(1,4) );
-	PipeLine::active_pipeline->add_Command( new Command(0,2) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined10(4,5,6)) );
-	PipeLine::active_pipeline->add_Command( new Command(0,0,new user_defined10(7,8,9)) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined2()) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,IF,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(depth++,OPEN_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined7()) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined1()) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined9()) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined10(1,2,3)) );
+	PipeLine::active_pipeline->add_Command( new Command(--depth,CLOSE_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,ELSE) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined10(4,5,6)) );
+	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined10(7,8,9)) );
 	heap = new NameSpace();
 	heap->add_Variable( new Variable<int>("int",200) );
 	heap->add_Variable( new Variable<int>("int2",150) );
@@ -149,7 +182,7 @@ void init(void){
 	global->add_Variable( new Variable<bool>("false2",false) );
 	global->add_Variable( new Variable<bool>("false2",false) );
 	global->add_Variable( new Variable<bool>("false2",false) );
-
+	*/
 }
 
 void display(void){

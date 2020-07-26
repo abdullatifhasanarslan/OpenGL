@@ -34,6 +34,7 @@ class Variable : public entity {
 	public:
 		Type value;
 		Variable();
+		Variable(std::string name);
 		Variable(std::string name, Type value);
 		Variable(const Variable<Type> &object);	//copy constructor
 		void display(int x, int y);

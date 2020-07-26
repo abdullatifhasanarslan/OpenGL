@@ -3,12 +3,40 @@
 #include "Functions.h"
 
 //FUNCTIONS ARE DECLARED HERE
+
+template <class Type>
+class assignment : public Function{
+	public:
+		assignment(std::string left_name, std::string right_name, Type* left, Type* right);	
+		void display(int x, int y);
+		void implement();
+
+	private:
+		std::string left_name;
+		std::string right_name;
+		Type* left;
+		Type* right;
+};
+
+template <class Type>
+class lessthan : public Function{
+	public:
+		lessthan(std::string left_name, std::string right_name, Type* left, Type* right);	
+		void display(int x, int y);
+		void implement();
+		
+	private:
+		std::string left_name;
+		std::string right_name;
+		Type* left;
+		Type* right;
+};
+
 class user_defined1 : public Function{
 	public:
-		user_defined1();
+		user_defined1();	
 		void display(int x, int y);
-		void implement();		
-		
+		void implement();	
 };
 
 class user_defined2 : public Function{
