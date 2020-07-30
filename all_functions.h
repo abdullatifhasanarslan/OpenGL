@@ -1,15 +1,16 @@
 #ifndef ALL_FUNCTIONS_H
 #define ALL_FUNCTIONS_H
 #include "Functions.h"
+#include "Variables.h"
 
 //FUNCTIONS ARE DECLARED HERE
-
 template <class Type>
 class assignment : public Function{
 	public:
 		assignment(std::string left_name, std::string right_name, Type* left, Type* right);	
 		void display(int x, int y);
 		void implement();
+		bool return_value;
 
 	private:
 		std::string left_name;
@@ -24,12 +25,67 @@ class lessthan : public Function{
 		lessthan(std::string left_name, std::string right_name, Type* left, Type* right);	
 		void display(int x, int y);
 		void implement();
+		bool return_value;
 		
 	private:
 		std::string left_name;
 		std::string right_name;
 		Type* left;
 		Type* right;
+};
+
+template <class Type>
+class greaterthan : public Function{
+	public:
+		greaterthan(std::string left_name, std::string right_name, Type* left, Type* right);	
+		void display(int x, int y);
+		void implement();
+		bool return_value;
+		
+	private:
+		std::string left_name;
+		std::string right_name;
+		Type* left;
+		Type* right;
+};
+
+template <class Type>
+class multiply_and_assign : public Function{
+	public:
+		multiply_and_assign(std::string left_name, std::string right_name, Type* left, Type* right);	
+		void display(int x, int y);
+		void implement();
+		
+	private:
+		std::string left_name;
+		std::string right_name;
+		Type* left;
+		Type* right;
+};
+
+class factorial : public Function{
+	public:
+		factorial(std::string left_name, std::string i_name, Variable<int>* left, Variable<int>* i);	
+		void display(int x, int y);
+		void implement();
+		int return_value;
+		Variable<int>* i;
+		
+	private:
+		std::string left_name;
+		std::string i_name;
+		Variable<int>* left;
+};
+
+class post_increment : public Function{
+	public:
+		post_increment(std::string variable_name, Variable<int>* variable);	
+		void display(int x, int y);
+		void implement();
+		Variable<int>* variable;
+		
+	private:
+		std::string variable_name;
 };
 
 class user_defined1 : public Function{

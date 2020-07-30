@@ -87,31 +87,37 @@ void init(void){
 	PipeLine::active_pipeline = new PipeLine();
 	heap = new NameSpace();
 	global = new NameSpace(); 
-	
+	//int i;
+	Variable<int>* _i = new Variable<int>("i");
+	NameSpace::active_stack->add_Variable( _i );
+	//int temp;
+	Variable<int>* _temp = new Variable<int>("temp");
+	NameSpace::active_stack->add_Variable( _temp );
 	//#define SIZE 10
-	#define SIZE 10
+	#define SIZE 5
 	//int array[SIZE];
 	int array[SIZE];	
 	Array<int>* _array = new Array<int>("array", array, SIZE);
 	NameSpace::active_stack->add_Variable( _array );
-	//int i;
-	Variable<int>* _i = new Variable<int>("i");
-	NameSpace::active_stack->add_Variable( _i );
 	//i=0;
 	Variable<int>* deneme = new Variable<int>();
 	deneme->value=0;
-	cout << endl << endl << "Whyyyy" << endl << endl;
 	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("i", "0", _i, deneme) ) );
 	//while(i<SIZE)
 	Variable<int>* deneme2 = new Variable<int>();
 	deneme2->value=SIZE;
 	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, new lessthan< Variable<int> >("while(i",  "10)", _i, deneme2) ) );
 	//{
-	PipeLine::active_pipeline->add_Command( new Command(depth++, OPEN_SCOPE) );
-	//array[i] = factorial(i);
-	//PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("array[i]", "factorial(i)", _array[_i], deneme) ) );
+	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
+	//temp = factorial(i);
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new factorial("temp", "i", _temp, _i) ) );
+	//array[i] = temp;
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("array[i]", "temp", (*_array)[_i->value], _temp) ) );
+	//PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("array[i]", "temp", _array[_i], deneme) ) );
+	//i++;
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new post_increment("i", _i) ) );
 	//}
-	PipeLine::active_pipeline->add_Command( new Command(--depth, CLOSE_LOOP_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_LOOP_SCOPE) );
 	//return EXIT_SUCCESS
 	
 	// active_stack = new NameSpace();

@@ -23,7 +23,6 @@ class Function{
 		virtual void display(int x, int y)=0;
 		virtual void implement()=0;
 		std::string name;
-		bool result;
 	private:
 
 	protected:

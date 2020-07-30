@@ -100,7 +100,7 @@ class Array : public entity {
 		Variable<Type>* value;
 		Array(std::string name, Type* value, int length);
 		void display(int x, int y);
-		Variable<Type>& operator[](int index);						//subscript:		a[b]
+		Variable<Type>* operator[](int index);						//subscript:		a[b]
 		~Array();
 	private:
 		int length;

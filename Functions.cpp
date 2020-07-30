@@ -14,7 +14,6 @@ extern void RenderString(int x, int y, const std::string &string, void* font=GLU
 //---------------------------------------------------------
 
 Function::Function(){
-
 }
 
 Function::~Function(){
@@ -107,11 +106,15 @@ void Command::display(int x, int y){
 		}
 		glDisable(GL_LINE_STIPPLE);
 	glPopMatrix();
+	this->active=true;
 }
 
 void Command::implement(){
 	if(this->func!=NULL){
 		this->func->implement();
+	}
+	if(this->type != WHILE && this->type != IF && this->type != ELSE_IF){
+		this->active=false;
 	}
 }
 
@@ -124,7 +127,6 @@ int Command::get_level(){
 }
 
 bool Command::is_active(){
-	this->active=this->func->result;
 	return this->active;
 }
 
@@ -162,7 +164,7 @@ void PipeLine::come_back(int level){
 		//I could also check their type and reactivate if they are deactivated
 		//This is a nice thing to remember since I could also show commented commands
 		//Igmpring some details was waaaay more easy,
-		this->commands[this->current]->activate();
+		this->commands[this->current--]->activate();
 	}
 	this->commands[this->current]->activate();
 	//step will increase 1
@@ -179,26 +181,27 @@ void Command::activate(){
 
 void PipeLine::skip(int level){
 	//skip current command and open_bracket
-	this->current+=2;
+	//this->current+=2;
+
 	while(this->commands[this->current]->get_level()!=level){
-		this->current++;			
+		this->commands[this->current++]->disable();		
 	}
+	this->commands[this->current]->disable();	
 	//step will skip close bracket
 }
 
 void PipeLine::disable_else(int level){
 	int i=this->current;
 	while( this->commands[i]->get_type() != ELSE || this->commands[i]->get_level() != level ){
-		if(this->commands[i]->get_type() == ELSE_IF ){
-			this->commands[i]->disable();
-		}		 
+		this->commands[i]->disable();
 		i++;
 	}
 	this->commands[i]->disable();
 }
 
 void PipeLine::step(){
-	this->commands[this->current]->implement(); //if it is conditional <active> should be determined inside
+	this->commands[this->current]->implement(); //if it is conditional <active> should be determined insideü
+
 	switch( this->commands[this->current]->get_type() ){
 		case IF:
 		case ELSE_IF:

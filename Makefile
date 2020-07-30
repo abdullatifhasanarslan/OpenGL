@@ -14,10 +14,10 @@ events.o: 	events.h events.cpp Variables.h
 Variables.o:	Variables.h Variables.cpp models.h
 	g++ -std=c++11 Variables.h Variables.cpp models.h -Wall -Werror -c
 Functions.o:	Functions.h Functions.cpp
-	g++ Functions.h Functions.cpp  -Wall -Werror -c
+	g++ -std=c++11 Functions.h Functions.cpp  -Wall -Werror -c
 
 all_functions.o: 	all_functions.h all_functions.cpp
-	g++ all_functions.h all_functions.cpp -Wall -Werror -c
+	g++ -std=c++11 all_functions.h all_functions.cpp -Wall -Werror -c
 
 clean:
 	rm *.o *.gch deneme

@@ -388,8 +388,8 @@ Variable<Type> Variable<Type>::operator--(int){
 */
 //member accss--------------------------------------------------------------------------
 template <class Type>
-Variable<Type>& Array<Type>::operator[](int index){
-	return this->value[index];
+Variable<Type>* Array<Type>::operator[](int index){
+	return this->value+index;
 }
 /*
 template <class Type>
