@@ -31,10 +31,11 @@ Command::Command(int level, int type, Function* func){
 
 void Command::display(int x, int y){
 	glPushMatrix();
-		glColor3f(0.7, 0.7, 0.0);
+		this->active ? glColor3f(0.7,0.7,0.0) : glColor3f(0.7,0.0,0.0);
 		glEnable(GL_LINE_STIPPLE);
 		glLineWidth(1.0);
 
+			
 		for(int i=0;i<this->level;i++){
 			//left
 			glLineStipple(1, 0xFFFF);
@@ -111,11 +112,16 @@ void Command::display(int x, int y){
 
 void Command::implement(){
 	if(this->func!=NULL){
+		cout << this->func->name << endl;
 		this->func->implement();
 	}
 	if(this->type != WHILE && this->type != IF && this->type != ELSE_IF){
 		this->active=false;
+	}else{
+		this->active = this->func->return_value;
+		cout << "returned" << this->active << endl;
 	}
+	
 }
 
 int Command::get_type(){
@@ -130,6 +136,13 @@ bool Command::is_active(){
 	return this->active;
 }
 
+void Command::disable(){
+	this->active=false;
+}
+
+void Command::activate(){
+	this->active=true;
+}
 
 //---------------------------------------------------------
 
@@ -160,7 +173,7 @@ void PipeLine::add_Command(Command* command){
 }
 
 void PipeLine::come_back(int level){
-	while(this->commands[this->current]->get_type() != WHILE || this->commands[this->current]->get_level() != level){
+	while(this->commands[this->current]->get_type() != WHILE || this->commands[this->current]->get_level() != level-1){
 		//I could also check their type and reactivate if they are deactivated
 		//This is a nice thing to remember since I could also show commented commands
 		//Igmpring some details was waaaay more easy,
@@ -171,20 +184,14 @@ void PipeLine::come_back(int level){
 	this->current--;
 }
 
-void Command::disable(){
-	this->active=false;
-}
-
-void Command::activate(){
-	this->active=true;
-}
 
 void PipeLine::skip(int level){
 	//skip current command and open_bracket
 	//this->current+=2;
-
-	while(this->commands[this->current]->get_level()!=level){
-		this->commands[this->current++]->disable();		
+	++this->current;
+	while(this->commands[this->current]->get_type()!=CLOSE_SCOPE && this->commands[this->current]->get_type()!=CLOSE_LOOP_SCOPE){
+		this->commands[this->current]->disable();
+		++this->current;
 	}
 	this->commands[this->current]->disable();	
 	//step will skip close bracket
@@ -200,8 +207,9 @@ void PipeLine::disable_else(int level){
 }
 
 void PipeLine::step(){
-	this->commands[this->current]->implement(); //if it is conditional <active> should be determined insideü
-
+	cout << "önce: " << this->commands[this->current]->is_active() << endl;
+	this->commands[this->current]->implement(); //if it is conditional <active> should be determined inside
+	cout << "sonra: " << this->commands[this->current]->is_active() << endl;
 	switch( this->commands[this->current]->get_type() ){
 		case IF:
 		case ELSE_IF:
@@ -214,14 +222,18 @@ void PipeLine::step(){
 		case WHILE:
 		case ELSE:
 			if( ! this->commands[this->current]->is_active() ){
+				cout << ":" << this->current << endl;
 				this->skip(this->commands[this->current]->get_level());
+				cout << ":" << this->current << endl;
 			}
+			break;
 		case CLOSE_LOOP_SCOPE:
 			this->come_back(this->commands[this->current]->get_level());
 		default:
 			break;
 	}
 	if(++this->current==this->commands.size()){
+		cout << "heeymaan" << endl;
 		if(this->parent!=NULL){
 			PipeLine::active_pipeline=this->parent;
 			NameSpace::active_stack=NameSpace::active_stack->get_parent();

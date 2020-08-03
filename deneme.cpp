@@ -96,7 +96,7 @@ void init(void){
 	//#define SIZE 10
 	#define SIZE 5
 	//int array[SIZE];
-	int array[SIZE];	
+	int array[SIZE] = {0};	
 	Array<int>* _array = new Array<int>("array", array, SIZE);
 	NameSpace::active_stack->add_Variable( _array );
 	//i=0;
@@ -106,13 +106,13 @@ void init(void){
 	//while(i<SIZE)
 	Variable<int>* deneme2 = new Variable<int>();
 	deneme2->value=SIZE;
-	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, new lessthan< Variable<int> >("while(i",  "10)", _i, deneme2) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, new lessthan< Variable<int> >("while(i",  "5)", _i, deneme2) ) );
 	//{
 	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
 	//temp = factorial(i);
 	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new factorial("temp", "i", _temp, _i) ) );
 	//array[i] = temp;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("array[i]", "temp", (*_array)[_i->value], _temp) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new array_assignment("array[i]", "temp", _array, _i, _temp) ) );
 	//PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("array[i]", "temp", _array[_i], deneme) ) );
 	//i++;
 	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new post_increment("i", _i) ) );

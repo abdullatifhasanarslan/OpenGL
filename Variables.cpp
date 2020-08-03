@@ -42,7 +42,7 @@ void entity::setSize(int width, int height){
 
 bool entity::checkCollision(int x, int y){
 	//cout  << this->name << ":  " << this->x << "," << this->y << "----" << x << "," << y << endl;
-	cout  << this->x << "," << this->y << "----" << x << "," << y << endl;
+	//cout  << this->x << "," << this->y << "----" << x << "," << y << endl;
 	if(this->x<x && x<this->x+this->width && this->y<y && y<this->y+this->height){
 		return true;
 	}

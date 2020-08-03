@@ -10,7 +10,6 @@ class assignment : public Function{
 		assignment(std::string left_name, std::string right_name, Type* left, Type* right);	
 		void display(int x, int y);
 		void implement();
-		bool return_value;
 
 	private:
 		std::string left_name;
@@ -19,13 +18,26 @@ class assignment : public Function{
 		Type* right;
 };
 
+class array_assignment : public Function{
+	public:
+		array_assignment(std::string array_name, std::string right_name, Array<int>* array, Variable<int>* index, Variable<int>* right);	
+		void display(int x, int y);
+		void implement();
+
+	private:
+		std::string array_name;
+		std::string right_name;
+		Array<int>* array;
+		Variable<int>* index;
+		Variable<int>* right;
+};
+
 template <class Type>
 class lessthan : public Function{
 	public:
 		lessthan(std::string left_name, std::string right_name, Type* left, Type* right);	
 		void display(int x, int y);
 		void implement();
-		bool return_value;
 		
 	private:
 		std::string left_name;
@@ -40,7 +52,6 @@ class greaterthan : public Function{
 		greaterthan(std::string left_name, std::string right_name, Type* left, Type* right);	
 		void display(int x, int y);
 		void implement();
-		bool return_value;
 		
 	private:
 		std::string left_name;
@@ -68,7 +79,7 @@ class factorial : public Function{
 		factorial(std::string left_name, std::string i_name, Variable<int>* left, Variable<int>* i);	
 		void display(int x, int y);
 		void implement();
-		int return_value;
+		int result;
 		Variable<int>* i;
 		
 	private:
@@ -80,6 +91,17 @@ class factorial : public Function{
 class post_increment : public Function{
 	public:
 		post_increment(std::string variable_name, Variable<int>* variable);	
+		void display(int x, int y);
+		void implement();
+		Variable<int>* variable;
+		
+	private:
+		std::string variable_name;
+};
+
+class post_decrement : public Function{
+	public:
+		post_decrement(std::string variable_name, Variable<int>* variable);	
 		void display(int x, int y);
 		void implement();
 		Variable<int>* variable;

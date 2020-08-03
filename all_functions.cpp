@@ -17,7 +17,7 @@ extern void RenderString(int x, int y, const std::string &string, void* font=GLU
 
 template <class Type>
 assignment< Type >::assignment(std::string left_name, std::string right_name, Type* left, Type* right){
-	this->name = left_name + " = " + right_name;
+	this->name = left_name + " = " + right_name + ";";
 	this->left_name = left_name;
 	this->right_name = right_name;
 	this->left = left;
@@ -27,7 +27,7 @@ assignment< Type >::assignment(std::string left_name, std::string right_name, Ty
 template <class Type>
 void assignment<Type>::display(int x, int y){
 	glPushMatrix();
-		glColor3f(0.5, 0.5, 1.0);
+		//glColor3f(0.5, 0.5, 1.0);
 		string text = this->name;
 		RenderString(x,Height-(y+24),text);
 	glPopMatrix();
@@ -35,20 +35,50 @@ void assignment<Type>::display(int x, int y){
 template <class Type>
 void assignment<Type>::implement(){
 	this->left = this->right;
-	this->return_value=true;
-	this->name=this->left_name + " = " + std::to_string(this->right->value);
+	//this->name=this->left_name + " = " + std::to_string(this->right->value);
 	this->display(this->x,this->y);
 	glutPostRedisplay();
 	glFlush();
 }
 
 template class assignment<Variable<int> >;
+//---------------------------------------------------------
+
+
+array_assignment::array_assignment(std::string array_name, std::string right_name, Array<int>* array, Variable<int>* index, Variable<int>* right){
+	this->name = array_name + " = " + right_name + ";";
+	this->array_name = array_name;
+	this->right_name = right_name;
+	this->array = array;
+	this->index = index;
+	this->right = right;
+}
+
+void array_assignment::display(int x, int y){
+	glPushMatrix();
+		//glColor3f(0.5, 0.5, 1.0);
+		string text = this->name;
+		RenderString(x,Height-(y+24),text);
+	glPopMatrix();
+}
+
+void array_assignment::implement(){
+	cout << "wowow" << this->index->value << endl;
+	this->array->value[this->index->value].value = this->right->value;
+	cout << "wowow" << this->index->value << endl;
+	//this->name=this->left_name + " = " + std::to_string(this->right->value);
+	this->display(this->x,this->y);
+	glutPostRedisplay();
+	glFlush();
+}
+
+
 
 //---------------------------------------------------------
 
 template <class Type>
 lessthan<Type>::lessthan(std::string left_name, std::string right_name, Type* left, Type* right){
-	this->name = left_name + " < " + right_name;
+	this->name = left_name + " < " + right_name + ";";
 	this->left_name = left_name;
 	this->right_name = right_name;
 	this->left = left;
@@ -58,16 +88,15 @@ lessthan<Type>::lessthan(std::string left_name, std::string right_name, Type* le
 template <class Type>
 void lessthan<Type>::display(int x, int y){
 	glPushMatrix();
-		glColor3f(0.5, 0.5, 1.0);
+		//glColor3f(0.5, 0.5, 1.0);
 		string text = this->name;
 		RenderString(x,Height-(y+24),text);
 	glPopMatrix();
 }
 template <class Type>
 void lessthan<Type>::implement(){
-	this->result = this->left < this->right ? true : false;
-	this->return_value=true;
-	this->name=std::to_string(this->result);
+	this->return_value=this->left->value < this->right->value ? true : false;
+	//this->name=std::to_string(this->return_value);
 	this->display(this->x,this->y);
 	glutPostRedisplay();
 	glFlush();
@@ -78,7 +107,7 @@ template class lessthan<Variable<int> >;
 
 template <class Type>
 greaterthan<Type>::greaterthan(std::string left_name, std::string right_name, Type* left, Type* right){
-	this->name = left_name + " > " + right_name;
+	this->name = left_name + " > " + right_name + ";";
 	this->left_name = left_name;
 	this->right_name = right_name;
 	this->left = left;
@@ -88,16 +117,16 @@ greaterthan<Type>::greaterthan(std::string left_name, std::string right_name, Ty
 template <class Type>
 void greaterthan<Type>::display(int x, int y){
 	glPushMatrix();
-		glColor3f(0.5, 0.5, 1.0);
+		//glColor3f(0.5, 0.5, 1.0);
 		string text = this->name;
 		RenderString(x,Height-(y+24),text);
 	glPopMatrix();
 }
 template <class Type>
 void greaterthan<Type>::implement(){
-	this->result = this->left > this->right ? true : false;
-	this->return_value=true;
-	this->name=std::to_string(this->result);
+	this->return_value=this->left->value > this->right->value ? true : false;
+	cout << this->left->value << " > " << this->right->value << " ---> " << this->return_value << endl;
+	//this->name=std::to_string(this->return_value);
 	this->display(this->x,this->y);
 	glutPostRedisplay();
 	glFlush();
@@ -108,7 +137,7 @@ template class greaterthan<Variable<int> >;
 
 template <class Type>
 multiply_and_assign<Type>::multiply_and_assign(std::string left_name, std::string right_name, Type* left, Type* right){
-	this->name = left_name + " = " + right_name;
+	this->name = left_name + " *= " + right_name + ";";
 	this->left_name = left_name;
 	this->right_name = right_name;
 	this->left = left;
@@ -118,14 +147,16 @@ multiply_and_assign<Type>::multiply_and_assign(std::string left_name, std::strin
 template <class Type>
 void multiply_and_assign<Type>::display(int x, int y){
 	glPushMatrix();
-		glColor3f(0.5, 0.5, 1.0);
+		//glColor3f(0.5, 0.5, 1.0);
 		string text = this->name;
 		RenderString(x,Height-(y+24),text);
 	glPopMatrix();
 }
 template <class Type>
 void multiply_and_assign<Type>::implement(){
-	*(this->left) *= *(this->right);
+	cout << this->left->value << "=" << this->left->value << "*" << this->right->value  << endl;
+	this->left->value *= this->right->value;
+	cout << this->left->value << "=" << this->left->value << "*" << this->right->value << endl;
 	this->display(this->x,this->y);
 	glutPostRedisplay();
 	glFlush();
@@ -135,17 +166,16 @@ template class multiply_and_assign<Variable<int> >;
 //---------------------------------------------------------
 
 factorial::factorial(std::string left_name, std::string i_name, Variable<int>* left, Variable<int>* i){
-	this->name = left_name + " = " + "factorial(" + i_name + ")";
+	this->name = left_name + " = " + "factorial(" + i_name + ");";
 	this->left_name = left_name;
 	this->i_name = i_name;
 	this->left = left;
 	this->i = i;
-	this->return_value=0;
 }
 
 void factorial::display(int x, int y){
 	glPushMatrix();
-		glColor3f(0.5, 0.5, 1.0);
+		//glColor3f(0.5, 0.5, 1.0);
 		string text = this->name;
 		RenderString(x,Height-(y+24),text);
 	glPopMatrix();
@@ -162,20 +192,21 @@ void factorial::implement(){
 	//while(i>1)
 	Variable<int>* deneme = new Variable<int>();
 	deneme->value=1;
-	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, new greaterthan< Variable<int> >("while(i",  "1)", i, deneme) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, new greaterthan< Variable<int> >("while(i",  "1)", _i, deneme) ) );
 	//{
-	PipeLine::active_pipeline->add_Command( new Command(depth++, OPEN_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
 	//result *= i;
 	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new multiply_and_assign< Variable<int> >("result", "i", _result, _i) ) );
 	//i++;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new post_increment("i", _i) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new post_decrement("i", _i) ) );
 	//}
-	PipeLine::active_pipeline->add_Command( new Command(--depth, CLOSE_LOOP_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_LOOP_SCOPE) );
 	//return EXIT_SUCCESS
-
-	this->return_value=_result->value;
-	this->left->value = this->return_value;
-	this->name=this->left_name + " = " + std::to_string(this->return_value);
+	//THİS IS WRONG------
+	this->result=_result->value;
+	this->left->value = this->result;
+	//-------------------
+	//this->name=this->left_name + " = " + std::to_string(this->return_value);
 	this->display(this->x,this->y);
 	glutPostRedisplay();
 	glFlush();
@@ -183,21 +214,43 @@ void factorial::implement(){
 //---------------------------------------------------------
 
 post_increment::post_increment(std::string variable_name, Variable<int>* variable){
-	this->name = variable_name + "++";
+	this->name = variable_name + "++;";
 	this->variable=variable;
 }
 
 void post_increment::display(int x, int y){
 	glPushMatrix();
-		glColor3f(0.5, 0.5, 1.0);
+		//glColor3f(0.5, 0.5, 1.0);
 		string text = this->name;
 		RenderString(x,Height-(y+24),text);
 	glPopMatrix();
 }
 
 void post_increment::implement(){
-	this->variable++;
-	this->name=this->variable_name + " = " + std::to_string(this->variable->value);
+	this->variable->value += 1;
+	//this->name=this->variable_name + " = " + std::to_string(this->variable->value);
+	this->display(this->x,this->y);
+	glutPostRedisplay();
+	glFlush();
+}
+//---------------------------------------------------------
+
+post_decrement::post_decrement(std::string variable_name, Variable<int>* variable){
+	this->name = variable_name + "--;";
+	this->variable=variable;
+}
+
+void post_decrement::display(int x, int y){
+	glPushMatrix();
+		//glColor3f(0.5, 0.5, 1.0);
+		string text = this->name;
+		RenderString(x,Height-(y+24),text);
+	glPopMatrix();
+}
+
+void post_decrement::implement(){
+	this->variable->value -= 1;
+	//this->name=this->variable_name + " = " + std::to_string(this->variable->value);
 	this->display(this->x,this->y);
 	glutPostRedisplay();
 	glFlush();
