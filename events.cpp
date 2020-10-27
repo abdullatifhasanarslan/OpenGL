@@ -39,6 +39,7 @@ void keyPressed(unsigned char key, int x, int y){
 			break;
 		case 13:
 			PipeLine::active_pipeline->step();
+			glutPostRedisplay();
 			break;
 		case 32:
 			viewX=0;

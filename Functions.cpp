@@ -27,11 +27,18 @@ Command::Command(int level, int type, Function* func){
 	this->type=type;
 	this->func=func;
 	this->active=true;
+	this->is_current=false;
 }
 
 void Command::display(int x, int y){
 	glPushMatrix();
-		this->active ? glColor3f(0.7,0.7,0.0) : glColor3f(0.7,0.0,0.0);
+		if(this->is_current){
+			glColor3f(0.0,0.7,0.7);
+		} else if(this->active){
+			glColor3f(0.7,0.7,0.0);
+		} else{
+			glColor3f(0.7,0.0,0.0);
+		}
 		glEnable(GL_LINE_STIPPLE);
 		glLineWidth(1.0);
 
@@ -107,20 +114,20 @@ void Command::display(int x, int y){
 		}
 		glDisable(GL_LINE_STIPPLE);
 	glPopMatrix();
-	this->active=true;
 }
 
 void Command::implement(){
 	if(this->func!=NULL){
-		cout << this->func->name << endl;
+		//cout << this->func->name << endl;
 		this->func->implement();
 	}
 	if(this->type != WHILE && this->type != IF && this->type != ELSE_IF){
 		this->active=false;
 	}else{
 		this->active = this->func->return_value;
-		cout << "returned" << this->active << endl;
+		//cout << "returned" << this->active << endl;
 	}
+	this->is_current=false;
 	
 }
 
@@ -158,7 +165,6 @@ PipeLine::PipeLine(PipeLine* parent){
 
 void PipeLine::display(){
 	int lastPose=225;
-
 	int size=this->commands.size();
 	Command* current;
 	for(int i=0;i<size;i++){
@@ -170,6 +176,9 @@ void PipeLine::display(){
 
 void PipeLine::add_Command(Command* command){
 	this->commands.push_back(command);
+	if(this->commands.size()==1){
+		this->commands[0]->is_current=true;
+	}
 }
 
 void PipeLine::come_back(int level){
@@ -207,12 +216,12 @@ void PipeLine::disable_else(int level){
 }
 
 void PipeLine::step(){
-	cout << "önce: " << this->commands[this->current]->is_active() << endl;
+	//This is just following step by step The most annoying part maybe
 	this->commands[this->current]->implement(); //if it is conditional <active> should be determined inside
-	cout << "sonra: " << this->commands[this->current]->is_active() << endl;
 	switch( this->commands[this->current]->get_type() ){
 		case IF:
 		case ELSE_IF:
+			//should be reconsidered with an example with if else
 			if( this->commands[this->current]->is_active() ){
 				this->disable_else(this->commands[this->current]->get_level());
 			} else{
@@ -222,9 +231,7 @@ void PipeLine::step(){
 		case WHILE:
 		case ELSE:
 			if( ! this->commands[this->current]->is_active() ){
-				cout << ":" << this->current << endl;
 				this->skip(this->commands[this->current]->get_level());
-				cout << ":" << this->current << endl;
 			}
 			break;
 		case CLOSE_LOOP_SCOPE:
@@ -233,18 +240,20 @@ void PipeLine::step(){
 			break;
 	}
 	if(++this->current==this->commands.size()){
-		cout << "heeymaan" << endl;
 		if(this->parent!=NULL){
 			PipeLine::active_pipeline=this->parent;
 			NameSpace::active_stack=NameSpace::active_stack->get_parent();
-			//destroy this
+			//destroy this and clean memory
 		} else {
 			cout<<"Program should be terminated but restarts instead"<<endl;
 			this->current=0;
+			this->commands[this->current]->is_current=true;
 		}
 		// } else{
 		// 	cout<<"Execution finished"<<endl;
 		// 	exit(0);
 		// }
+	} else{
+		this->commands[this->current]->is_current=true;
 	}
 }

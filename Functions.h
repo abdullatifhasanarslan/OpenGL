@@ -41,6 +41,7 @@ class Command{
 		bool is_active();
 		void disable();
 		void activate();
+		bool is_current;
 	private:
 		bool active;
 		int level;

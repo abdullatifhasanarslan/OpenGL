@@ -61,6 +61,19 @@ class greaterthan : public Function{
 };
 
 template <class Type>
+class returner : public Function{
+	public:
+		returner(std::string returned_name, Type* left, Type* right);	
+		void display(int x, int y);
+		void implement();
+		
+	private:
+		std::string returned_name;
+		Type* left;
+		Type* right;
+};
+
+template <class Type>
 class multiply_and_assign : public Function{
 	public:
 		multiply_and_assign(std::string left_name, std::string right_name, Type* left, Type* right);	
