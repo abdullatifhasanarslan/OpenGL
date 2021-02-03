@@ -94,7 +94,7 @@ void init(void){
 	Variable<int>* _temp = new Variable<int>("temp");
 	NameSpace::active_stack->add_Variable( _temp );
 	//#define SIZE 10
-	#define SIZE 5
+	#define SIZE 10
 	//int array[SIZE];
 	int array[SIZE] = {0};	
 	Array<int>* _array = new Array<int>("array", array, SIZE);
@@ -106,7 +106,9 @@ void init(void){
 	//while(i<SIZE)
 	Variable<int>* deneme2 = new Variable<int>();
 	deneme2->value=SIZE;
-	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, new lessthan< Variable<int> >("while(i",  "5)", _i, deneme2) ) );
+	string b = int_to_string(SIZE);
+	b+=')';
+	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, new lessthan< Variable<int>, Variable<int> >("while(i",  b, _i, deneme2) ) );
 	//{
 	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
 	//temp = factorial(i);

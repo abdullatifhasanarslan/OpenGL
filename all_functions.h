@@ -32,10 +32,10 @@ class array_assignment : public Function{
 		Variable<int>* right;
 };
 
-template <class Type>
+template <class Type, class Type2>
 class lessthan : public Function{
 	public:
-		lessthan(std::string left_name, std::string right_name, Type* left, Type* right);	
+		lessthan(std::string left_name, std::string right_name, Type* left, Type2* right);	
 		void display(int x, int y);
 		void implement();
 		
@@ -46,10 +46,10 @@ class lessthan : public Function{
 		Type* right;
 };
 
-template <class Type>
+template <class Type, class Type2>
 class greaterthan : public Function{
 	public:
-		greaterthan(std::string left_name, std::string right_name, Type* left, Type* right);	
+		greaterthan(std::string left_name, std::string right_name, Type* left, Type2* right);	
 		void display(int x, int y);
 		void implement();
 		
@@ -57,7 +57,7 @@ class greaterthan : public Function{
 		std::string left_name;
 		std::string right_name;
 		Type* left;
-		Type* right;
+		Type2* right;
 };
 
 template <class Type>
@@ -73,10 +73,10 @@ class returner : public Function{
 		Type* right;
 };
 
-template <class Type>
+template <class Type,class Type2>
 class multiply_and_assign : public Function{
 	public:
-		multiply_and_assign(std::string left_name, std::string right_name, Type* left, Type* right);	
+		multiply_and_assign(std::string left_name, std::string right_name, Type* left, Type2* right);	
 		void display(int x, int y);
 		void implement();
 		
@@ -84,7 +84,7 @@ class multiply_and_assign : public Function{
 		std::string left_name;
 		std::string right_name;
 		Type* left;
-		Type* right;
+		Type2* right;
 };
 
 class factorial : public Function{

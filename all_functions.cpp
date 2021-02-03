@@ -74,25 +74,25 @@ void array_assignment::implement(){
 
 //---------------------------------------------------------
 
-template <class Type>
-lessthan<Type>::lessthan(std::string left_name, std::string right_name, Type* left, Type* right){
-	this->name = left_name + " < " + right_name + ";";
+template <class Type, class Type2>
+lessthan<Type,Type2>::lessthan(std::string left_name, std::string right_name, Type* left, Type2* right){
+	this->name = left_name + " < " + right_name;
 	this->left_name = left_name;
 	this->right_name = right_name;
 	this->left = left;
 	this->right = right;
 }
 
-template <class Type>
-void lessthan<Type>::display(int x, int y){
+template <class Type, class Type2>
+void lessthan<Type,Type2>::display(int x, int y){
 	glPushMatrix();
 		//glColor3f(0.5, 0.5, 1.0);
 		string text = this->name;
 		RenderString(x,Height-(y+24),text);
 	glPopMatrix();
 }
-template <class Type>
-void lessthan<Type>::implement(){
+template <class Type, class Type2>
+void lessthan<Type,Type2>::implement(){
 	this->return_value=this->left->value < this->right->value ? true : false;
 	//this->name=std::to_string(this->return_value);
 	this->display(this->x,this->y);
@@ -100,28 +100,28 @@ void lessthan<Type>::implement(){
 	glFlush();
 }
 
-template class lessthan<Variable<int> >;
+template class lessthan<Variable<int>, Variable<int> >;
 //---------------------------------------------------------
 
-template <class Type>
-greaterthan<Type>::greaterthan(std::string left_name, std::string right_name, Type* left, Type* right){
-	this->name = left_name + " > " + right_name + ";";
+template <class Type, class Type2>
+greaterthan<Type,Type2>::greaterthan(std::string left_name, std::string right_name, Type* left, Type2* right){
+	this->name = left_name + " > " + right_name;
 	this->left_name = left_name;
 	this->right_name = right_name;
 	this->left = left;
 	this->right = right;
 }
 
-template <class Type>
-void greaterthan<Type>::display(int x, int y){
+template <class Type, class Type2>
+void greaterthan<Type,Type2>::display(int x, int y){
 	glPushMatrix();
 		//glColor3f(0.5, 0.5, 1.0);
 		string text = this->name;
 		RenderString(x,Height-(y+24),text);
 	glPopMatrix();
 }
-template <class Type>
-void greaterthan<Type>::implement(){
+template <class Type, class Type2>
+void greaterthan<Type,Type2>::implement(){
 	this->return_value=this->left->value > this->right->value ? true : false;
 	//cout << this->left->value << " > " << this->right->value << " ---> " << this->return_value << endl;
 	//this->name=std::to_string(this->return_value);
@@ -130,11 +130,11 @@ void greaterthan<Type>::implement(){
 	glFlush();
 }
 
-template class greaterthan<Variable<int> >;
+template class greaterthan<Variable<int>, Variable<int>>;
 //---------------------------------------------------------
 
-template <class Type>
-multiply_and_assign<Type>::multiply_and_assign(std::string left_name, std::string right_name, Type* left, Type* right){
+template <class Type, class Type2>
+multiply_and_assign<Type,Type2>::multiply_and_assign(std::string left_name, std::string right_name, Type* left, Type2* right){
 	this->name = left_name + " *= " + right_name + ";";
 	this->left_name = left_name;
 	this->right_name = right_name;
@@ -142,16 +142,16 @@ multiply_and_assign<Type>::multiply_and_assign(std::string left_name, std::strin
 	this->right = right;
 }
 
-template <class Type>
-void multiply_and_assign<Type>::display(int x, int y){
+template <class Type,class Type2>
+void multiply_and_assign<Type,Type2>::display(int x, int y){
 	glPushMatrix();
 		//glColor3f(0.5, 0.5, 1.0);
 		string text = this->name;
 		RenderString(x,Height-(y+24),text);
 	glPopMatrix();
 }
-template <class Type>
-void multiply_and_assign<Type>::implement(){
+template <class Type,class Type2>
+void multiply_and_assign<Type,Type2>::implement(){
 	//cout << this->left->value << "=" << this->left->value << "*" << this->right->value  << endl;
 	this->left->value *= this->right->value;
 	this->display(this->x,this->y);
@@ -159,7 +159,7 @@ void multiply_and_assign<Type>::implement(){
 	glFlush();
 }
 
-template class multiply_and_assign<Variable<int> >;
+template class multiply_and_assign<Variable<int>,Variable<int> >;
 //---------------------------------------------------------
 
 factorial::factorial(std::string left_name, std::string i_name, Variable<int>* left, Variable<int>* i){
@@ -179,10 +179,11 @@ void factorial::display(int x, int y){
 }
 /*
 int factorial(int i){
+	//int result=1;
 	while(i>1)
 	{
 		result *= i;
-		i++;
+		i--;
 	}
 	return result;
 }
@@ -190,26 +191,26 @@ int factorial(int i){
 void factorial::implement(){
 	//int factorial(int i){
 	NameSpace::active_stack=new NameSpace(NameSpace::active_stack);
-	Variable<int>* _i = new Variable<int>("i",this->i->value);
-	NameSpace::active_stack->add_Variable( _i );
-	Variable<int>* _result = new Variable<int>("result",1);
-	NameSpace::active_stack->add_Variable( _result );
+	Variable<int>* i = new Variable<int>("i",this->i->value);
+	NameSpace::active_stack->add_Variable( i );
+	Variable<int>* result = new Variable<int>("result",1);
+	NameSpace::active_stack->add_Variable( result );
 	PipeLine::active_pipeline = new PipeLine(PipeLine::active_pipeline);
 	int depth=0;
 	//while(i>1)
 	Variable<int>* deneme = new Variable<int>();
 	deneme->value=1;
-	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, new greaterthan< Variable<int> >("while(i",  "1)", _i, deneme) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, new greaterthan< Variable<int>, Variable<int> >("while(i",  "1)", i, deneme) ) );
 	//{
 	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
 	//result *= i;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new multiply_and_assign< Variable<int> >("result", "i", _result, _i) ) );
-	//i++;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new post_decrement("i", _i) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new multiply_and_assign< Variable<int> ,Variable<int>>("result", "i", result, i) ) );
+	//i--;
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new post_decrement("i", i) ) );
 	//}
 	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_LOOP_SCOPE) );
 	//return result
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new returner<Variable<int>>("result", this->left, _result) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new returner<Variable<int>>("result", this->left, result) ) );
 	//-------------------
 	//this->name=this->left_name + " = " + std::to_string(this->return_value);
 	PipeLine::active_pipeline->commands[0]->is_current=true;
