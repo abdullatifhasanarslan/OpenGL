@@ -1,14 +1,20 @@
 {
 	"variables":{
-
+		"i":{
+			"type":"int",
+			"value":"5"
+		},
+		"result":{
+			"type":"int",
+			"value":"1"
+		}
 	},
 	"functions":{
 		"factorial":{
 			"parameters":[
 				{
 					"type":"int",
-					"name":"i",
-					"default":false
+					"name":"i"
 				}
 			],
 			"variables":{
@@ -18,12 +24,12 @@
 				},
 				"result":{
 					"type":"int",
-					"value":1
+					"value":"1"
 				}
 			},
 			"commands":[
 				{
-					"depth":0,
+					"depth":"0",
 					"type":"WHILE",
 					"function":"greaterthan<Variable<int>,Variable<int>>",
 					"parameters":[
@@ -34,11 +40,11 @@
 					]
 				},
 				{
-					"depth":1,
+					"depth":"1",
 					"type":"OPEN_SCOPE"
 				},
 				{
-					"depth":1,
+					"depth":"1",
 					"type":"NORMAL",
 					"function":"multiply_and_assign<Variable<int>,Variable<int>>",
 					"parameters":[
@@ -49,7 +55,7 @@
 					]	
 				},
 				{
-					"depth":1,
+					"depth":"1",
 					"type":"NORMAL",
 					"function":"post_decrement",
 					"parameters":[
@@ -58,11 +64,11 @@
 					]	
 				},
 				{
-					"depth":1,
+					"depth":"1",
 					"type":"CLOSE_LOOP_SCOPE"
 				},
 				{
-					"depth":0,
+					"depth":"0",
 					"type":"NORMAL",
 					"function":"returner<Variable<int>>",
 					"parameters":[
@@ -84,21 +90,21 @@
 		"variables":{
 			"i":{
 				"type":"int",
-				"value":0
+				"value":"0"
 			},
 			"temp":{
 				"type":"int",
-				"value":0
+				"value":"0"
 			},
 			"array":{
-				"type":"int[]",
-				"value":[],
-				"size":10
+				"type":"array",
+				"value_type":"int",
+				"size":"10"
 			}
 		},
 		"commands":[
 			{
-				"depth":0,
+				"depth":"0",
 				"type":"NORMAL",
 				"function":"assignment<Variable<int>>",
 				"parameters":[
@@ -109,7 +115,7 @@
 				]
 			},
 			{
-				"depth":0,
+				"depth":"0",
 				"type":"WHILE",
 				"function":"lessthan<Variable<int>,Variable<int>>",
 				"parameters":[
@@ -120,11 +126,11 @@
 				]
 			},
 			{
-				"depth":1,
+				"depth":"1",
 				"type":"OPEN_SCOPE"
 			},
 			{
-				"depth":1,
+				"depth":"1",
 				"type":"NORMAL",
 				"function":"factorial",
 				"parameters":[
@@ -135,7 +141,7 @@
 				]	
 			},
 			{
-				"depth":1,
+				"depth":"1",
 				"type":"NORMAL",
 				"function":"array_assignment",
 				"parameters":[
@@ -147,7 +153,7 @@
 				]	
 			},
 			{
-				"depth":1,
+				"depth":"1",
 				"type":"NORMAL",
 				"function":"post_increment",
 				"parameters":[
@@ -156,7 +162,7 @@
 				]	
 			},
 			{
-				"depth":1,
+				"depth":"1",
 				"type":"CLOSE_LOOP_SCOPE"
 			}
 		]

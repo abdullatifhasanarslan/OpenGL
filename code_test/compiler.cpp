@@ -52,9 +52,9 @@ int main(){
 	cout << code << endl;
 
 	//parse file-----------------------------
-	if(parser()){
-		cout << "Parser complete" << endl;
-	}
+	// if(parser()){
+	// 	cout << "Parser complete" << endl;
+	// }
 	
 	return 0;
 }
@@ -63,40 +63,40 @@ int main(){
 bool parser(string code){
 	STATE state=START;	
 	for(string::iterator i=code.begin();i!=code.end();){
-		switch(STATE){
+		switch(state){
 			case START:
 				if(*i=='#'){
 					i++;
 					if(*i=='i'){
-						STATE=INCLUDE;
+						state=INCLUDE;
 					}else if(*i=='d'){
-						STATE=DEFINE;
+						state=DEFINE;
 					}
 				}else{
-					STATE=START2;
+					state=START2;
 				}
 				break;
 			case INCLUDE:
-				string
+				// string
 				break;
 			case DEFINE:
 				break;
 			case START2:
 				break;
-			case :
-				break;
-			case :
-				break;
-			case :
-				break;
-			case :
-				break;
-			case :
-				break;
-			case :
-				break;
-			case :
-				break;
+			// case :
+			// 	break;
+			// case :
+			// 	break;
+			// case :
+			// 	break;
+			// case :
+			// 	break;
+			// case :
+			// 	break;
+			// case :
+			// 	break;
+			// case :
+			// 	break;
 			default:
 				break;
 		}
