@@ -22,7 +22,7 @@ entity::entity(){
 }
 
 entity::~entity(){
-	std::cerr << "There is something here my friend" << endl;
+	//std::cerr << "There is something here my friend" << endl;
 }
 
 void entity::move(int x, int y){
@@ -412,7 +412,7 @@ Variable<ReType>& operator[](InType index);						//subscript:		a[b]
 
 template <class Type>
 Variable<Type>::~Variable(){
-
+	//cout << this->name << " dieded" << endl;
 }
 template <class Type>
 Array<Type>::~Array(){
@@ -436,7 +436,11 @@ NameSpace::NameSpace(NameSpace* parent){
 }
 
 NameSpace::~NameSpace(){
-
+	entity* temp;
+	for(vector<entity*>::iterator iter=this->ordered.begin(); iter!=this->ordered.end(); ++iter) {
+	  temp = *iter;
+	  delete temp;
+	}
 }
 
 entity* NameSpace::get_Variable(const std::string name){

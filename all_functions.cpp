@@ -15,6 +15,33 @@ extern void RenderString(int x, int y, const std::string &string, void* font=GLU
 
 //---------------------------------------------------------
 
+combined::combined(Function* left, void* function, Function* right){
+	this->name = "combined";
+	this->left = left;
+	this->function = function;
+	this->right = right;
+}
+
+template <class Type>
+void assignment<Type>::display(int x, int y){
+	glPushMatrix();
+		//glColor3f(0.5, 0.5, 1.0);
+		string text = this->name;
+		RenderString(x,Height-(y+24),text);
+	glPopMatrix();
+}
+template <class Type>
+void assignment<Type>::implement(){
+	this->left->value = this->right->value;
+	//this->name=this->left_name + " = " + std::to_string(this->right->value);
+	this->display(this->x,this->y);
+	glutPostRedisplay();
+	glFlush();
+}
+
+template class assignment<Variable<int> >;
+//---------------------------------------------------------
+
 template <class Type>
 assignment< Type >::assignment(std::string left_name, std::string right_name, Type* left, Type* right){
 	this->name = left_name + " = " + right_name + ";";
@@ -655,5 +682,32 @@ void user_defined10::implement(){
 	this->g=this->b;
 	this->b=temp;
 	this->display(this->x,this->y);
+	glFlush();
+}
+
+//---------------------------------------------------------
+
+modulo::modulo(std::string left_name, std::string right_name, Variable<int>* left, Variable<int>* right){
+	this->name = left_name + " % " + right_name;
+	this->left_name = left_name;
+	this->right_name = right_name;
+	this->left = left;
+	this->right = right;
+}
+
+void modulo::display(int x, int y){
+	glPushMatrix();
+		//glColor3f(0.5, 0.5, 1.0);
+		string text = this->name;
+		RenderString(x,Height-(y+24),text);
+	glPopMatrix();
+}
+void modulo::implement(){
+	this->result=this->left->value % this->right->value;
+	this->return_value=this->result>0 ? true:false;
+	//cout << this->left->value << " > " << this->right->value << " ---> " << this->return_value << endl;
+	//this->name=std::to_string(this->return_value);
+	this->display(this->x,this->y);
+	glutPostRedisplay();
 	glFlush();
 }

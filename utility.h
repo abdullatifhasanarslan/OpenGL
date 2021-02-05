@@ -15,10 +15,6 @@
 								glVertex2f((x1),(y2));\
 							glEnd();
 
-string int_to_string(int a){
-	string str = std::to_string(a);
-	return str;
-}
 
 template <class T>
 std::ostream& operator<<(std::ostream& out, const Variable<T>& variable) {

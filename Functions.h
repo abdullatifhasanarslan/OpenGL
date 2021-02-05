@@ -15,11 +15,10 @@
 #define	CLOSE_LOOP_SCOPE 7
 
 
-
 class Function{
 	public:
 		Function();
-		~Function();
+		virtual ~Function() = 0;
 		virtual void display(int x, int y)=0;
 		virtual void implement()=0;
 		std::string name;
@@ -34,6 +33,7 @@ class Function{
 class Command{
 	public:
 		Command(int level=0, int type=0, Function* func=NULL);
+		~Command();
 		void display(int x, int y);
 		void implement();
 		int get_type();
@@ -44,6 +44,7 @@ class Command{
 		bool is_current;
 	private:
 		bool active;
+		bool executed;
 		int level;
 		int type;
 		Function* func;
@@ -56,6 +57,7 @@ class PipeLine{
 	public:
 		PipeLine();
 		PipeLine(PipeLine* parent);
+		~PipeLine();
 		void display();
 		void add_Command(Command* command);
 		void step();

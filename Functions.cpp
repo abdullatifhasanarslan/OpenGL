@@ -28,16 +28,25 @@ Command::Command(int level, int type, Function* func){
 	this->func=func;
 	this->active=true;
 	this->is_current=false;
+	this->executed=false;
+}
+
+Command::~Command(){
+	if(this->func!=NULL){
+		delete this->func;
+	}
 }
 
 void Command::display(int x, int y){
 	glPushMatrix();
 		if(this->is_current){
-			glColor3f(0.0,0.7,0.7);
+			glColor3f( 0.40000f, 0.85098f, 0.93725f );
+		} else if(this->executed){
+			glColor3f( 0.90196f, 0.85882f, 0.45490f );
 		} else if(this->active){
-			glColor3f(0.7,0.7,0.0);
+			glColor3f( 0.99216f, 0.59216f, 0.12157f );
 		} else{
-			glColor3f(0.7,0.0,0.0);
+			glColor3f( 0.45882f, 0.44314f, 0.36863f );
 		}
 		glEnable(GL_LINE_STIPPLE);
 		glLineWidth(1.0);
@@ -118,16 +127,18 @@ void Command::display(int x, int y){
 
 void Command::implement(){
 	if(this->func!=NULL){
-		//cout << this->func->name << endl;
 		this->func->implement();
 	}
-	if(this->type != WHILE && this->type != IF && this->type != ELSE_IF){
-		this->active=false;
+	if(this->type == ELSE){
+		this->active=true;
+	}else if(this->type != WHILE && this->type != IF && this->type != ELSE_IF){
+		this->active=true;
 	}else{
 		this->active = this->func->return_value;
 		//cout << "returned" << this->active << endl;
 	}
 	this->is_current=false;
+	this->executed=true;
 	
 }
 
@@ -149,6 +160,7 @@ void Command::disable(){
 
 void Command::activate(){
 	this->active=true;
+	this->executed=false;
 }
 
 //---------------------------------------------------------
@@ -161,6 +173,14 @@ PipeLine::PipeLine(PipeLine* parent){
 	this->current=0;
 	this->parent=parent;
 	// PipeLine::active_pipeline=this;
+}
+PipeLine::~PipeLine(){
+
+	Command* temp;
+	for(vector<Command*>::iterator iter=this->commands.begin(); iter!=this->commands.end(); ++iter) {
+	  temp = *iter;
+	  delete temp;
+	}
 }
 
 void PipeLine::display(){
@@ -207,12 +227,15 @@ void PipeLine::skip(int level){
 }
 
 void PipeLine::disable_else(int level){
-	int i=this->current;
-	while( this->commands[i]->get_type() != ELSE || this->commands[i]->get_level() != level ){
+	int i=this->current+1;
+	while(this->commands[i]->get_level() != level ){
+		i++;
+	} 
+	while(this->commands[i]->get_level() != level  || this->commands[i]->get_type() == ELSE_IF || this->commands[i]->get_type() == ELSE){
 		this->commands[i]->disable();
 		i++;
 	}
-	this->commands[i]->disable();
+	
 }
 
 void PipeLine::step(){
@@ -236,24 +259,35 @@ void PipeLine::step(){
 			break;
 		case CLOSE_LOOP_SCOPE:
 			this->come_back(this->commands[this->current]->get_level());
+			break;
 		default:
 			break;
 	}
-	if(++this->current==this->commands.size()){
+
+	while(++this->current!=this->commands.size() && !this->commands[this->current]->is_active());
+	
+	if(this->current==this->commands.size()){
 		if(this->parent!=NULL){
-			PipeLine::active_pipeline=this->parent;
+
+			NameSpace* temp2 = NameSpace::active_stack;
 			NameSpace::active_stack=NameSpace::active_stack->get_parent();
-			//destroy this and clean memory
+			delete temp2;
+
+	
+			PipeLine* temp = this;
+			
+			PipeLine::active_pipeline=this->parent;
+			delete temp;
+
+			return;
 		} else {
 			cout<<"Program should be terminated but restarts instead"<<endl;
 			this->current=0;
-			this->commands[this->current]->is_current=true;
+			for(int i=0;i<!this->commands.size();i++){
+				this->commands[this->current]->activate();
+			}
 		}
-		// } else{
-		// 	cout<<"Execution finished"<<endl;
-		// 	exit(0);
-		// }
-	} else{
-		this->commands[this->current]->is_current=true;
 	}
+
+	this->commands[this->current]->is_current=true;
 }

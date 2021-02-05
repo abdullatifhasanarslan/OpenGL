@@ -26,6 +26,11 @@ void drawStackSquare();
 // 	}
 // }
 
+string int_to_string(int a){
+	string str = std::to_string(a);
+	return str;
+}
+
 
 void RenderString(int x, int y, const std::string &string, void* font=GLUT_BITMAP_TIMES_ROMAN_24){
 	// glColor3d(1.0, 0.0, 0.0);
@@ -83,8 +88,8 @@ void display(void){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glPushMatrix();
 		//Some settings
-		glColor3f(0.7, 0.7, 0.0);
-		glLineWidth(20.0);
+		glColor3f( 0.65098f, 0.88627f, 0.18039f );
+		glLineWidth(10.0);
 		
 		//drawing rectangles
 		drawFuncSquare();
@@ -252,13 +257,18 @@ void display(void){
 void drawStackSquare(){
 	glPushMatrix();
 		//Some settings
-		glColor3f(0.7, 0.7, 0.0);
-		glLineWidth(20.0);
-		glBegin(GL_LINE_LOOP);
+		glColor3f( 0.65098f, 0.88627f, 0.18039f );
+		glLineWidth(1.0);
+		// glBegin(GL_LINE_LOOP);
+		glBegin(GL_LINES);
+			glVertex2d(350,Height-950);
+			glVertex2d(350,Height-200);
+			
 			glVertex2d(350,Height-200);
 			glVertex2d(600,Height-200);
+			
+			glVertex2d(600,Height-200);
 			glVertex2d(600,Height-950);
-			glVertex2d(350,Height-950);
 		glEnd();	
 	glPopMatrix();
 
@@ -267,13 +277,18 @@ void drawStackSquare(){
 void drawFuncSquare(){
 	glPushMatrix();
 		//Some settings
-		glColor3f(0.7, 0.7, 0.0);
-		glLineWidth(20.0);
-		glBegin(GL_LINE_LOOP);
+		glColor3f( 0.65098f, 0.88627f, 0.18039f );
+		glLineWidth(1.0);
+		// glBegin(GL_LINE_LOOP);
+		glBegin(GL_LINES);
+			glVertex2d(325,Height-1000);
+			glVertex2d(325,Height-150);
+			
 			glVertex2d(325,Height-150);
 			glVertex2d(1875,Height-150);
+			
+			glVertex2d(1875,Height-150);
 			glVertex2d(1875,Height-1000);
-			glVertex2d(325,Height-1000);
 		glEnd();	
 	glPopMatrix();
 }
@@ -281,7 +296,7 @@ void drawFuncSquare(){
 //////////////code comes here
 
 void init(void){
-	glClearColor(0.3, 0.3, 0.3, 0.0);
+	glClearColor(0.15294f, 0.15686f, 0.13333, 0);
 	glShadeModel(GL_FLAT);
 	glEnable(GL_POLYGON_STIPPLE);
 
@@ -290,6 +305,8 @@ void init(void){
 	PipeLine::active_pipeline = new PipeLine();
 	heap = new NameSpace();
 	global = new NameSpace(); 
+	// Variable<int>* sil = new Variable<int>("sil",1);
+	// global->add_Variable( sil );
 	//int i;
 	Variable<int>* _i = new Variable<int>("i");
 	NameSpace::active_stack->add_Variable( _i );
@@ -299,7 +316,7 @@ void init(void){
 	//#define SIZE 10
 	#define SIZE 10
 	//int array[SIZE];
-	int array[SIZE];	
+	int array[SIZE]={0};	
 	Array<int>* _array = new Array<int>("array", array, SIZE);
 	NameSpace::active_stack->add_Variable( _array );
 	//i=0;
@@ -316,6 +333,38 @@ void init(void){
 	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
 	//temp = factorial(i);
 	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new factorial("temp", "i", _temp, _i) ) );
+	//if(i%2)
+	Variable<int>* deneme3 = new Variable<int>();
+	deneme3->value=2;
+	PipeLine::active_pipeline->add_Command( new Command(depth, IF, new modulo("if(i",  "2)", _i, deneme3) ) );
+	//	{
+	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
+	//	i++;
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new post_increment("i", _i) ) );
+	//	}
+	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE) );
+	//else if(i>5)
+	Variable<int>* deneme4 = new Variable<int>();
+	deneme4->value=5;
+	PipeLine::active_pipeline->add_Command( new Command(depth, ELSE_IF, new greaterthan<Variable<int>,Variable<int>>("else if(i",  "5)", _i, deneme4) ) );
+	//{
+	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
+	//i=0;
+	Variable<int>* deneme5 = new Variable<int>();
+	deneme5->value=0;
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("i", "0", _i, deneme5) ) );
+	//}
+	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE) );
+	//else
+	PipeLine::active_pipeline->add_Command( new Command(depth, ELSE));
+	//{
+	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
+	//i=i*2;
+	Variable<int>* deneme6 = new Variable<int>();
+	deneme6->value=2;
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new multiply_and_assign< Variable<int> ,Variable<int>>("i", "2", _i, deneme6) ) );
+	//}
+	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE) );
 	//array[i] = temp;
 	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new array_assignment("array[i]", "temp", _array, _i, _temp) ) );
 	//PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("array[i]", "temp", _array[_i], deneme) ) );
