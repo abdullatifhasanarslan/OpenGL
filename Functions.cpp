@@ -22,9 +22,10 @@ Function::~Function(){
 
 //---------------------------------------------------------
 
-Command::Command(int level, int type, Function* func){
+Command::Command(int level, int type, std::string name, Function* func){
 	this->level=level;
 	this->type=type;
+	this->name=name;
 	this->func=func;
 	this->active=true;
 	this->is_current=false;
@@ -121,6 +122,8 @@ void Command::display(int x, int y){
 		if(this->func!=NULL){
 			this->func->display(x,y);
 		}
+		string text = this->name;
+		RenderString(x,Height-(y+24),text);
 		glDisable(GL_LINE_STIPPLE);
 	glPopMatrix();
 }

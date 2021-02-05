@@ -21,7 +21,6 @@ class Function{
 		virtual ~Function() = 0;
 		virtual void display(int x, int y)=0;
 		virtual void implement()=0;
-		std::string name;
 		bool return_value;
 	private:
 
@@ -32,7 +31,7 @@ class Function{
 
 class Command{
 	public:
-		Command(int level=0, int type=0, Function* func=NULL);
+		Command(int level=0, int type=0, std::string name="", Function* func=NULL);
 		~Command();
 		void display(int x, int y);
 		void implement();
@@ -42,6 +41,7 @@ class Command{
 		void disable();
 		void activate();
 		bool is_current;
+		std::string name;
 	private:
 		bool active;
 		bool executed;

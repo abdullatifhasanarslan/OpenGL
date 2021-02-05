@@ -322,56 +322,56 @@ void init(void){
 	//i=0;
 	Variable<int>* deneme = new Variable<int>();
 	deneme->value=0;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("i", "0", _i, deneme) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "i=0", new assignment< Variable<int> >(_i, deneme) ) );
 	//while(i<SIZE)
 	Variable<int>* deneme2 = new Variable<int>();
 	deneme2->value=SIZE;
 	string b = int_to_string(SIZE);
 	b+=')';
-	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, new lessthan< Variable<int>, Variable<int> >("while(i",  b, _i, deneme2) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, "while(i<size)", new lessthan< Variable<int>, Variable<int> >(_i, deneme2) ) );
 	//{
-	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE,"{") );
 	//temp = factorial(i);
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new factorial("temp", "i", _temp, _i) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "temp=factorial(i)", new factorial(_temp, _i) ) );
 	//if(i%2)
 	Variable<int>* deneme3 = new Variable<int>();
 	deneme3->value=2;
-	PipeLine::active_pipeline->add_Command( new Command(depth, IF, new modulo("if(i",  "2)", _i, deneme3) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, IF, "if(i%2)", new modulo(_i, deneme3) ) );
 	//	{
-	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE,"{") );
 	//	i++;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new post_increment("i", _i) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "i++", new post_increment(_i) ) );
 	//	}
-	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE,"}") );
 	//else if(i>5)
 	Variable<int>* deneme4 = new Variable<int>();
 	deneme4->value=5;
-	PipeLine::active_pipeline->add_Command( new Command(depth, ELSE_IF, new greaterthan<Variable<int>,Variable<int>>("else if(i",  "5)", _i, deneme4) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, ELSE_IF, "else if(i>5)", new greaterthan<Variable<int>,Variable<int>>(_i, deneme4) ) );
 	//{
-	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE,"{") );
 	//i=0;
 	Variable<int>* deneme5 = new Variable<int>();
 	deneme5->value=0;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("i", "0", _i, deneme5) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "i=0", new assignment< Variable<int> >(_i, deneme5) ) );
 	//}
-	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE,"}") );
 	//else
-	PipeLine::active_pipeline->add_Command( new Command(depth, ELSE));
+	PipeLine::active_pipeline->add_Command( new Command(depth, ELSE,"else"));
 	//{
-	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE,"{") );
 	//i=i*2;
 	Variable<int>* deneme6 = new Variable<int>();
 	deneme6->value=2;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new multiply_and_assign< Variable<int> ,Variable<int>>("i", "2", _i, deneme6) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "i*=2", new multiply_and_assign< Variable<int> ,Variable<int>>(_i, deneme6) ) );
 	//}
-	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE, "}") );
 	//array[i] = temp;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new array_assignment("array[i]", "temp", _array, _i, _temp) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "array[i]=temp", new array_assignment(_array, _i, _temp) ) );
 	//PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("array[i]", "temp", _array[_i], deneme) ) );
 	//i++;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new post_increment("i", _i) ) );
+	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "i++", new post_increment(_i) ) );
 	//}
-	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_LOOP_SCOPE) );
+	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_LOOP_SCOPE, "}") );
 	//return EXIT_SUCCESS
 	
 	// active_stack = new NameSpace();
