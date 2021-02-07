@@ -5,11 +5,12 @@
 #include <string>
 
 using json = nlohmann::json;
+using namespace std;
 
 int main(){
 	int i=0;
 	// read a JSON file
-	std::ifstream file("sample_result.json");
+	ifstream file("sample_result.json");
 	json code;
 	file >> code;
 	file.close();
@@ -20,19 +21,54 @@ int main(){
 	json main_variables = main["variables"];
 	json main_commands = main["commands"];
 
-	//start of the init
 
-	
-	std::cout << "void init(void){" << std::endl;
-	std::cout << "\tglClearColor(0.3, 0.3, 0.3, 0.0);" << std::endl;
-	std::cout << "\tglShadeModel(GL_FLAT);" << std::endl;
-	std::cout << "\tglEnable(GL_POLYGON_STIPPLE);" << std::endl;
-	std::cout << "\tNameSpace::active_stack = new NameSpace();" << std::endl;
-	std::cout << "\tint depth=0;" << std::endl;
-	std::cout << "\tPipeLine::active_pipeline = new PipeLine();" << std::endl;
-	std::cout << "\theap = new NameSpace();" << std::endl;
-	std::cout << "\tglobal = new NameSpace();" << std::endl;
-	std::cout << std::endl << std::endl;
+	cout << "#ifndef USER_DEFINED_HPP" << endl;
+	cout << "#define USER_DEFINED_HPP" << endl;
+
+	cout << "#include \"Variables.h\"" << endl;
+	cout << "#include \"Functions.h\"" << endl;
+	cout << "#include \"all_functions.h\"" << endl;
+	cout << "#include <GL/glut.h>" << endl;
+	cout << "#include <stdlib.h>" << endl;
+	cout << "#include <iostream>" << endl;
+	cout << "NameSpace* heap;" << endl;
+	cout << "NameSpace* global; " << endl;
+	cout << "PipeLine* PipeLine::active_pipeline;" << endl;
+	cout << "NameSpace* NameSpace::active_stack;" << endl;
+
+
+
+
+	//function definitions
+
+	for (json::iterator it = functions.begin(); it != functions.end(); ++it) {
+		cout << "class " << it.key() << " : public Function {" << endl
+		cout << "public:" << endl
+		cout << it.key() << "( : public Function {" << endl
+		if((*it).find("value") != (*it).end()){
+			cout << "\t//" << (*it)["type"].get<string>() << " " << it.key() << "=" << (*it)["value"].get<string>() << ";" << endl;
+			cout << "\tVariable<" << (*it)["type"].get<string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<string>() << ">(\"" << it.key() << "\"," << (*it)["value"].get<string>() << ");" << endl;
+		}else{
+			cout << "\t//" << (*it)["type"].get<string>() << " " << it.key() << ";" << endl;	
+			cout << "\tVariable<" << (*it)["type"].get<string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<string>() << ">(\"" << it.key() << "\");" << endl;
+		}
+		cout << "\tglobal->add_Variable(" << it.key() << ");" << endl;
+	}
+
+
+
+
+	//start of the init
+	cout << "void init(void){" << endl;
+	cout << "\tglClearColor(0.3, 0.3, 0.3, 0.0);" << endl;
+	cout << "\tglShadeModel(GL_FLAT);" << endl;
+	cout << "\tglEnable(GL_POLYGON_STIPPLE);" << endl;
+	cout << "\tNameSpace::active_stack = new NameSpace();" << endl;
+	cout << "\tint depth=0;" << endl;
+	cout << "\tPipeLine::active_pipeline = new PipeLine();" << endl;
+	cout << "\theap = new NameSpace();" << endl;
+	cout << "\tglobal = new NameSpace();" << endl;
+	cout << endl << endl;
 
 	
 	//definitions maybe
@@ -40,13 +76,13 @@ int main(){
 	//global variables
 	for (json::iterator it = variables.begin(); it != variables.end(); ++it) {
 		if((*it).find("value") != (*it).end()){
-			std::cout << "\t//" << (*it)["type"].get<std::string>() << " " << it.key() << "=" << (*it)["value"].get<std::string>() << ";" << std::endl;
-			std::cout << "\tVariable<" << (*it)["type"].get<std::string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<std::string>() << ">(\"" << it.key() << "\"," << (*it)["value"].get<std::string>() << ");" << std::endl;
+			cout << "\t//" << (*it)["type"].get<string>() << " " << it.key() << "=" << (*it)["value"].get<string>() << ";" << endl;
+			cout << "\tVariable<" << (*it)["type"].get<string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<string>() << ">(\"" << it.key() << "\"," << (*it)["value"].get<string>() << ");" << endl;
 		}else{
-			std::cout << "\t//" << (*it)["type"].get<std::string>() << " " << it.key() << ";" << std::endl;	
-			std::cout << "\tVariable<" << (*it)["type"].get<std::string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<std::string>() << ">(\"" << it.key() << "\");" << std::endl;
+			cout << "\t//" << (*it)["type"].get<string>() << " " << it.key() << ";" << endl;	
+			cout << "\tVariable<" << (*it)["type"].get<string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<string>() << ">(\"" << it.key() << "\");" << endl;
 		}
-		std::cout << "\tglobal->add_Variable(" << it.key() << ");" << std::endl;
+		cout << "\tglobal->add_Variable(" << it.key() << ");" << endl;
 	}
 
 
@@ -56,53 +92,41 @@ int main(){
 	
 	//main_variables
 	for (json::iterator it = main_variables.begin(); it != main_variables.end(); ++it) {
-		std::string type = (*it)["type"].get<std::string>();
+		string type = (*it)["type"].get<string>();
 		if(type.compare("array")==0){
-			std::cout << "\t//" << (*it)["value_type"].get<std::string>() << " " << it.key() << "[" << (*it)["size"].get<std::string>() << "];" << std::endl;
-			std::cout << "\t" << (*it)["value_type"].get<std::string>() << " " << it.key() << "[" << (*it)["size"] << "];" << std::endl;
-			std::cout << "\tArray<" << (*it)["value_type"].get<std::string>() << ">* " << it.key() << "=new Array<" << (*it)["value_type"].get<std::string>() << ">(\"" << it.key() << "\"," << it.key() << "," << (*it)["size"].get<std::string>() << ");" << std::endl;
+			cout << "\t//" << (*it)["value_type"].get<string>() << " " << it.key() << "[" << (*it)["size"].get<string>() << "];" << endl;
+			cout << "\t" << (*it)["value_type"].get<string>() << " " << it.key() << "[" << (*it)["size"] << "];" << endl;
+			cout << "\tArray<" << (*it)["value_type"].get<string>() << ">* " << it.key() << "=new Array<" << (*it)["value_type"].get<string>() << ">(\"" << it.key() << "\"," << it.key() << "," << (*it)["size"].get<string>() << ");" << endl;
 			
 		}else if((*it).find("value") != (*it).end()){
-			std::cout << "\t//" << (*it)["type"].get<std::string>() << " " << it.key() << "=" << (*it)["value"].get<std::string>() << ";" << std::endl;
-			std::cout << "\tVariable<" << (*it)["type"].get<std::string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<std::string>() << ">(\"" << it.key() << "\"," << (*it)["value"].get<std::string>() << ");" << std::endl;
+			cout << "\t//" << (*it)["type"].get<string>() << " " << it.key() << "=" << (*it)["value"].get<string>() << ";" << endl;
+			cout << "\tVariable<" << (*it)["type"].get<string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<string>() << ">(\"" << it.key() << "\"," << (*it)["value"].get<string>() << ");" << endl;
 		}else{
-			std::cout << "\t//" << (*it)["type"].get<std::string>() << " " << it.key() << ";" << std::endl;	
-			std::cout << "\tVariable<" << (*it)["type"].get<std::string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<std::string>() << ">(\"" << it.key() << "\");" << std::endl;
+			cout << "\t//" << (*it)["type"].get<string>() << " " << it.key() << ";" << endl;	
+			cout << "\tVariable<" << (*it)["type"].get<string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<string>() << ">(\"" << it.key() << "\");" << endl;
 		}
-		std::cout << "\tNameSpace::active_stack->add_Variable(" << it.key() << ");" << std::endl;
+		cout << "\tNameSpace::active_stack->add_Variable(" << it.key() << ");" << endl;
 	}		
 	
 	//main_commands
 	for (json::iterator it = main_commands.begin(); it != main_commands.end(); ++it) {
-		std::cout << "\tPipeLine::active_pipeline->add_Command(new Command(" << (*it)["depth"].get<std::string>() << "," << (*it)["type"].get<std::string>();
+		cout << "\tPipeLine::active_pipeline->add_Command(new Command(" << (*it)["depth"].get<string>() << "," << (*it)["type"].get<string>();
 		if((*it).find("function") != (*it).end()){
-			std::cout << ",new " << (*it)["function"].get<std::string>() << "(";
+			cout << ",new " << (*it)["function"].get<string>() << "(";
 			if((*it).find("parameters") != (*it).end()){
 				int j;
 				for(j=0; j < (*it)["parameters"].size()-1; ++j){
-					std::cout << (*it)["parameters"].at(j).get<std::string>() << ",";
+					cout << (*it)["parameters"].at(j).get<string>() << ",";
 				}
-				std::cout << (*it)["parameters"].at(j).get<std::string>();
+				cout << (*it)["parameters"].at(j).get<string>();
 			}
-			std::cout << "))";
+			cout << "))";
 		}
-		std::cout << ");" << std::endl;
+		cout << ");" << endl;
 	}
 		
-	//function definitions but they should be to the other file
 	
-		// std::cout << "Variables: " << code["variables"] << std::endl;
-		// std::cout << "Functions: " << code["functions"]["factorial"]["parameters"] << std::endl;
-		// // write prettified JSON to another file
-		// std::ofstream o("deneme.json");
-		// o << std::setw(4) << j << std::endl;
-		// o.close();
-
-		// std::ofstream deneme("deneme2.json");
-		// deneme << std::setw(4) << j2 << std::endl;
-		// deneme.close();
-	
-	std::cout << "}" << std::endl;
+	cout << "}" << endl;
 
 	return 0;
 }

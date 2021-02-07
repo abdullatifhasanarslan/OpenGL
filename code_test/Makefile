@@ -9,3 +9,8 @@ run: compiler
 
 coder: coder.cpp
 	g++ -std=c++11 coder.cpp -o coder
+	./coder
+
+
+clean:
+	rm *.o *.gch deneme

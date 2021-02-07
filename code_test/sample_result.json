@@ -1,17 +1,14 @@
 {
 	"variables":{
-		"i":{
-			"type":"int",
-			"value":"5"
-		},
-		"result":{
-			"type":"int",
-			"value":"1"
-		}
 	},
 	"functions":{
 		"factorial":{
+			"return_type":"int",
 			"parameters":[
+				{
+					"type":"Variable<int>*",
+					"name":"left"
+				}
 				{
 					"type":"int",
 					"name":"i"
@@ -107,9 +104,8 @@
 				"depth":"0",
 				"type":"NORMAL",
 				"function":"assignment<Variable<int>>",
+				"text":"i=0;",
 				"parameters":[
-					"\"i\"",
-					"\"0\"",
 					"i",
 					"0"
 				]
@@ -118,27 +114,110 @@
 				"depth":"0",
 				"type":"WHILE",
 				"function":"lessthan<Variable<int>,Variable<int>>",
+				"text":"while(i<5)",
 				"parameters":[
-					"\"while(i\"",
-					"\"5)\"",
 					"i",
 					"5"
 				]
 			},
 			{
 				"depth":"1",
-				"type":"OPEN_SCOPE"
+				"type":"OPEN_SCOPE",
+				"text":"{"
 			},
 			{
 				"depth":"1",
 				"type":"NORMAL",
 				"function":"factorial",
+				"text":"temp=factorial(i)",
 				"parameters":[
-					"\"temp\"",
-					"\"i\"",
 					"temp",
 					"i"
 				]	
+			},
+			{
+				"depth":"1",
+				"type":"IF",
+				"function":"modulo",
+				"text":"if(i%2)",
+				"parameters":[
+					"temp",
+					"i"
+				]	
+			},
+			{
+				"depth":"2",
+				"type":"OPEN_SCOPE",
+				"text":"{"
+			},
+			{
+				"depth":"2",
+				"type":"NORMAL",
+				"function":"post_increment",
+				"text":"i++;",
+				"parameters":[
+					"i"
+				]
+			},
+			{
+				"depth":"2",
+				"type":"CLOSE_SCOPE",
+				"text":"}"
+			},
+			{
+				"depth":"1",
+				"type":"ELSE_IF",
+				"function":"greater_than",
+				"text":"else if(i>5)",
+				"parameters":[
+					"i",
+					"5"
+				]	
+			},
+			{
+				"depth":"2",
+				"type":"OPEN_SCOPE",
+				"text":"{"
+			},
+			{
+				"depth":"2",
+				"type":"NORMAL",
+				"function":"assignment<Variable<int>>",
+				"text":"i=0;",
+				"parameters":[
+					"i",
+					"0"
+				]
+			},
+			{
+				"depth":"2",
+				"type":"CLOSE_SCOPE",
+				"text":"}"
+			},
+			{
+				"depth":"1",
+				"type":"ELSE",
+				"text":"else"
+			},
+			{
+				"depth":"2",
+				"type":"OPEN_SCOPE",
+				"text":"{"
+			},
+			{
+				"depth":"2",
+				"type":"NORMAL",
+				"function":"multiply_and_assign<Variable<int>,Variable<int>>",
+				"text":"i*=2;",
+				"parameters":[
+					"i",
+					"2"
+				]
+			},
+			{
+				"depth":"2",
+				"type":"CLOSE_SCOPE",
+				"text":"}"
 			},
 			{
 				"depth":"1",

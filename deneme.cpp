@@ -7,6 +7,7 @@
 #include "models.h"
 #include "Variables.h"
 #include "Functions.h"
+#include "user_defined.hpp"
 #include "utility.h"
 #include "all_functions.h"
 using namespace std;
@@ -48,11 +49,6 @@ int Width = 1920;
 int Height = 1080;
 const char* WindowName = "deneme";
 
-// NameSpace* active_stack;
-NameSpace* heap;
-NameSpace* global; 
-PipeLine* PipeLine::active_pipeline;
-NameSpace* NameSpace::active_stack;
 /*
  *	Request double buffer display mode.
  *	Register mouse input callback functions
@@ -291,156 +287,4 @@ void drawFuncSquare(){
 			glVertex2d(1875,Height-1000);
 		glEnd();	
 	glPopMatrix();
-}
-
-//////////////code comes here
-
-void init(void){
-	glClearColor(0.15294f, 0.15686f, 0.13333, 0);
-	glShadeModel(GL_FLAT);
-	glEnable(GL_POLYGON_STIPPLE);
-
-	NameSpace::active_stack = new NameSpace();
-	int depth=0;
-	PipeLine::active_pipeline = new PipeLine();
-	heap = new NameSpace();
-	global = new NameSpace(); 
-	// Variable<int>* sil = new Variable<int>("sil",1);
-	// global->add_Variable( sil );
-	//int i;
-	Variable<int>* _i = new Variable<int>("i");
-	NameSpace::active_stack->add_Variable( _i );
-	//int temp;
-	Variable<int>* _temp = new Variable<int>("temp");
-	NameSpace::active_stack->add_Variable( _temp );
-	//#define SIZE 10
-	#define SIZE 10
-	//int array[SIZE];
-	int array[SIZE]={0};	
-	Array<int>* _array = new Array<int>("array", array, SIZE);
-	NameSpace::active_stack->add_Variable( _array );
-	//i=0;
-	Variable<int>* deneme = new Variable<int>();
-	deneme->value=0;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "i=0", new assignment< Variable<int> >(_i, deneme) ) );
-	//while(i<SIZE)
-	Variable<int>* deneme2 = new Variable<int>();
-	deneme2->value=SIZE;
-	string b = int_to_string(SIZE);
-	b+=')';
-	PipeLine::active_pipeline->add_Command( new Command(depth, WHILE, "while(i<size)", new lessthan< Variable<int>, Variable<int> >(_i, deneme2) ) );
-	//{
-	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE,"{") );
-	//temp = factorial(i);
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "temp=factorial(i)", new factorial(_temp, _i) ) );
-	//if(i%2)
-	Variable<int>* deneme3 = new Variable<int>();
-	deneme3->value=2;
-	PipeLine::active_pipeline->add_Command( new Command(depth, IF, "if(i%2)", new modulo(_i, deneme3) ) );
-	//	{
-	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE,"{") );
-	//	i++;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "i++", new post_increment(_i) ) );
-	//	}
-	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE,"}") );
-	//else if(i>5)
-	Variable<int>* deneme4 = new Variable<int>();
-	deneme4->value=5;
-	PipeLine::active_pipeline->add_Command( new Command(depth, ELSE_IF, "else if(i>5)", new greaterthan<Variable<int>,Variable<int>>(_i, deneme4) ) );
-	//{
-	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE,"{") );
-	//i=0;
-	Variable<int>* deneme5 = new Variable<int>();
-	deneme5->value=0;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "i=0", new assignment< Variable<int> >(_i, deneme5) ) );
-	//}
-	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE,"}") );
-	//else
-	PipeLine::active_pipeline->add_Command( new Command(depth, ELSE,"else"));
-	//{
-	PipeLine::active_pipeline->add_Command( new Command(++depth, OPEN_SCOPE,"{") );
-	//i=i*2;
-	Variable<int>* deneme6 = new Variable<int>();
-	deneme6->value=2;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "i*=2", new multiply_and_assign< Variable<int> ,Variable<int>>(_i, deneme6) ) );
-	//}
-	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_SCOPE, "}") );
-	//array[i] = temp;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "array[i]=temp", new array_assignment(_array, _i, _temp) ) );
-	//PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, new assignment< Variable<int> >("array[i]", "temp", _array[_i], deneme) ) );
-	//i++;
-	PipeLine::active_pipeline->add_Command( new Command(depth, NORMAL, "i++", new post_increment(_i) ) );
-	//}
-	PipeLine::active_pipeline->add_Command( new Command(depth--, CLOSE_LOOP_SCOPE, "}") );
-	//return EXIT_SUCCESS
-	
-	// active_stack = new NameSpace();
-	// active_stack->add_Variable( new Variable<char>("character",'a') );
-	// active_stack->add_Variable( new Variable<double>("double_number",31.4561234) );
-	// active_stack->add_Variable( new Variable<float>("float_number",16.28) );
-	// active_stack->add_Variable( new Variable<int>("integer_number",30) );
-	// active_stack->add_Variable( new Variable<bool>("boolean",true) );
-	// active_stack->add_Variable( new Variable<bool>("newbool",false) );
-	// heap = new NameSpace();
-	// heap->add_Variable( new Variable<int>("",200) );
-	// global = new NameSpace(); 
-	// global->add_Variable( new Variable<int>("",100) );
-	/*
-	Variable<int>* deneme = new Variable<int>("int1",200);
-	NameSpace::active_stack = new NameSpace();
-	NameSpace::active_stack->add_Variable( deneme );
-	NameSpace::active_stack->add_Variable( new Variable<Variable<int>*>("pointer", deneme) );
-	NameSpace::active_stack->add_Variable( new Variable<char>("character",'a') );
-	NameSpace::active_stack->add_Variable( new Variable<char>("char2",'2') );
-	NameSpace::active_stack->add_Variable( new Variable<char>("char3",'3') );
-	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
-	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
-	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
-	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
-	NameSpace::active_stack->add_Variable( new Variable<char>("char4",'4') );
-	int depth=0;
-	PipeLine::active_pipeline = new PipeLine();
-	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined2()) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,IF,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(depth++,OPEN_SCOPE) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined7()) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined1()) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined9()) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined10(1,2,3)) );
-	PipeLine::active_pipeline->add_Command( new Command(--depth,CLOSE_SCOPE) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,ELSE) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined10(4,5,6)) );
-	PipeLine::active_pipeline->add_Command( new Command(depth,NORMAL,new user_defined10(7,8,9)) );
-	heap = new NameSpace();
-	heap->add_Variable( new Variable<int>("int",200) );
-	heap->add_Variable( new Variable<int>("int2",150) );
-	heap->add_Variable( new Variable<int>("int3",100) );
-	heap->add_Variable( new Variable<int>("int3",75) );
-	heap->add_Variable( new Variable<int>("int3",70) );
-	heap->add_Variable( new Variable<int>("int3",50) );
-	heap->add_Variable( new Variable<int>("int3",40) );
-	heap->add_Variable( new Variable<int>("int3",30) );
-	heap->add_Variable( new Variable<double>("wow_a_double",2.718) );
-	heap->add_Variable( new Variable<int>("int4",10) );
-	global = new NameSpace(); 
-	global->add_Variable( new Variable<bool>("true",true) );
-	global->add_Variable( new Variable<bool>("true2",true) );
-	global->add_Variable( new Variable<bool>("false",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	global->add_Variable( new Variable<bool>("false2",false) );
-	*/
 }

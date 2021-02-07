@@ -1,5 +1,5 @@
 
-deneme:	deneme.o events.o Variables.o Functions.o all_functions.o
+deneme:	deneme.o events.o Variables.o Functions.o all_functions.o user_defined.hpp
 	g++ deneme.o events.o Variables.o Functions.o all_functions.o -lGL -lGLU -lglut -lm -o deneme
 # deneme:	deneme.o events.o utility.o Variables.o Functions.o all_functions.o
 # 	g++ deneme.o events.o Variables.o Functions.o all_functions.o -lGL -lGLU -lglut -lm -o deneme
@@ -18,6 +18,7 @@ Functions.o:	Functions.h Functions.cpp
 
 all_functions.o: 	all_functions.h all_functions.cpp
 	g++ -std=c++11 all_functions.h all_functions.cpp -Wall -Werror -c
+
 
 compiler: code_test/compiler.cpp
 	cd code_test
