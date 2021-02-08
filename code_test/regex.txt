@@ -35,3 +35,34 @@ DO_WHILE_LOOP			:=	do<SPACE>*{<SPACE>*<CONTENT><SPACE>*}<SPACE>*while<SPACE>*(<S
 
 
 TYPELIST:=	
+
+
+
+
+
+
+
+START				:=		<INCLUDE>* <GLOBALS>* <FUNCTIONS>* <MAIN>
+INCLUDE				:=		#include < "<LIBRARY>" | \<<LIBRARY>\> >
+GLOBALS				:=		<TYPE> <NAME> <=VALUE | "">;
+FUNCTIONS			:=		<TYPE> <NAME> ( <PARAMETER> ) { <FUNCTION_CONTENT> }
+PARAMETER			:=		<TYPE> <NAME>
+FUNCTION_CONTENT	:=		<COMMAND>*
+TYPE				:=		....
+NAME				:=		....
+PARAMETER			:=		....
+LIBRARY				:=		....
+COMMAND				:=		....
+
+
+
+
+
+
+
+
+
+
+
+
+

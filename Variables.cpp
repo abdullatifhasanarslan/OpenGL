@@ -99,7 +99,20 @@ Array<Type>::Array(std::string name, Type* value, int length){
 	for(int i=0;i<length;i++){
 		this->value[i].value=value[i];
 	}
-	this->setSize(25,50);
+	this->setSize(25,length*74);
+}
+
+template <>
+void Variable<int>::display(int x, int y){
+	this->x=x;
+	this->y=y;
+	glPushMatrix();
+		glColor3f( 0.97647f, 0.14902f, 0.44706f );
+		string text = std::to_string(this->value);
+		RenderString(this->x,Height-(this->y),text);
+		text=this->name+"="+text;
+		RenderString(this->x,Height-(this->y+12),text,GLUT_BITMAP_HELVETICA_12);
+	glPopMatrix();
 }
 
 template <class Type>
@@ -168,18 +181,21 @@ void Array<Type>::display(int x, int y){
 	this->y=y;
 	int font_height=24;
 	int element_height=this->value[0].getheight();
-	int last_pose=y;
+	int last_pose=y+30;
 	glPushMatrix();
 
 		glLineWidth(1.0);
 		for(int i=0;i<this->length;i++){
+			glColor3f( 0.63137f, 0.93725f, 0.89412f );
 			Line(this->x-10,Height-(last_pose-element_height),this->x+30,Height-(last_pose-element_height));
 			Line(this->x-10,Height-(last_pose-element_height),this->x-10,Height-(last_pose+font_height));
 			Line(this->x-10,Height-(last_pose+font_height),this->x+30,Height-(last_pose+font_height));
 			this->value[i].display(x,last_pose);
 			last_pose+=element_height+font_height;
 		}
+		// string text=this->name;
 		last_pose-=element_height;
+		// RenderString(this->x,this->y-150,text,GLUT_BITMAP_HELVETICA_12);
 
 	glPopMatrix();
 }

@@ -1,52 +1,57 @@
 {
-	"variables":{
+
+	"definitions":{
+
 	},
+	"variables":{
+		"k":{
+			"type":"int"
+		}
+	},
+	
 	"functions":{
 		"factorial":{
-			"return_type":"int",
-			"parameters":[
-				{
-					"type":"Variable<int>*",
-					"name":"left"
-				}
-				{
-					"type":"int",
-					"name":"i"
-				}
-			],
 			"variables":{
-				"i":{
-					"type":"int",
-					"value":"parameter"
-				},
 				"result":{
 					"type":"int",
 					"value":"1"
 				}
 			},
+			"parameters":[
+				{
+					"type":"int",
+					"name":"left",
+					"nostack":""
+				},
+				{
+					"type":"int",
+					"name":"i"
+				}
+			],
+			"display":[
+			],
 			"commands":[
 				{
 					"depth":"0",
 					"type":"WHILE",
+					"text":"while(i>1)",
 					"function":"greaterthan<Variable<int>,Variable<int>>",
 					"parameters":[
-						"\"while(i\"",
-						"\"1)\"",
 						"i",
-						"1"
+						"new Variable<int>(\"\",1)"
 					]
 				},
 				{
 					"depth":"1",
-					"type":"OPEN_SCOPE"
+					"type":"OPEN_SCOPE",
+					"text":"{"
 				},
 				{
 					"depth":"1",
 					"type":"NORMAL",
+					"text":"result*=i",
 					"function":"multiply_and_assign<Variable<int>,Variable<int>>",
 					"parameters":[
-						"\"result\"",
-						"\"i\"",
 						"result",
 						"i"
 					]	
@@ -54,31 +59,29 @@
 				{
 					"depth":"1",
 					"type":"NORMAL",
+					"text": "i",
 					"function":"post_decrement",
 					"parameters":[
-						"\"i\"",
 						"i"
 					]	
 				},
 				{
 					"depth":"1",
-					"type":"CLOSE_LOOP_SCOPE"
+					"type":"CLOSE_LOOP_SCOPE",
+					"text": "}"
 				},
 				{
 					"depth":"0",
 					"type":"NORMAL",
+					"text":"return result",
 					"function":"returner<Variable<int>>",
 					"parameters":[
-						"\"result\"",
 						"this->left",
 						"result"
 					]	
 				}
 			]
 		}
-	},
-	"definitions":{
-
 	},
 	"main":{
 		"parameters":[
@@ -103,11 +106,11 @@
 			{
 				"depth":"0",
 				"type":"NORMAL",
-				"function":"assignment<Variable<int>>",
 				"text":"i=0;",
+				"function":"assignment<Variable<int>>",
 				"parameters":[
 					"i",
-					"0"
+					"new Variable<int>(\"\",0)"
 				]
 			},
 			{
@@ -117,7 +120,7 @@
 				"text":"while(i<5)",
 				"parameters":[
 					"i",
-					"5"
+					"new Variable<int>(\"\",5)"
 				]
 			},
 			{
@@ -141,8 +144,8 @@
 				"function":"modulo",
 				"text":"if(i%2)",
 				"parameters":[
-					"temp",
-					"i"
+					"i",
+					"new Variable<int>(\"\",2)"
 				]	
 			},
 			{
@@ -171,7 +174,7 @@
 				"text":"else if(i>5)",
 				"parameters":[
 					"i",
-					"5"
+					"new Variable<int>(\"\",5)"
 				]	
 			},
 			{
@@ -186,7 +189,7 @@
 				"text":"i=0;",
 				"parameters":[
 					"i",
-					"0"
+					"new Variable<int>(\"\",0)"
 				]
 			},
 			{
@@ -211,7 +214,7 @@
 				"text":"i*=2;",
 				"parameters":[
 					"i",
-					"2"
+					"new Variable<int>(\"\",2)"
 				]
 			},
 			{
@@ -223,9 +226,8 @@
 				"depth":"1",
 				"type":"NORMAL",
 				"function":"array_assignment",
+				"text":"array[i]=temp;",
 				"parameters":[
-					"\"array[i]\"",
-					"\"temp\"",
 					"array",
 					"i",
 					"temp"
@@ -235,14 +237,15 @@
 				"depth":"1",
 				"type":"NORMAL",
 				"function":"post_increment",
+				"text":"i++;",
 				"parameters":[
-					"\"i\"",
 					"i"
 				]	
 			},
 			{
 				"depth":"1",
-				"type":"CLOSE_LOOP_SCOPE"
+				"type":"CLOSE_LOOP_SCOPE",
+				"text":"}"
 			}
 		]
 	}

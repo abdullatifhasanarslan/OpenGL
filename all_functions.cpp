@@ -34,6 +34,7 @@ void assignment<Type>::implement(){
 	glFlush();
 }
 
+
 template class assignment<Variable<int> >;
 //---------------------------------------------------------
 
@@ -71,7 +72,7 @@ void lessthan<Type,Type2>::display(int x, int y){
 
 template <class Type, class Type2>
 void lessthan<Type,Type2>::implement(){
-	this->return_value=this->left->value < this->right->value ? true : false;
+	this->return_value=this->left->value < this->right->value;
 	//this->name=std::to_string(this->return_value);
 	this->display(this->x,this->y);
 	glutPostRedisplay();
@@ -190,6 +191,7 @@ void modulo::display(int x, int y){
 	glPopMatrix();
 }
 void modulo::implement(){
+
 	this->result=this->left->value % this->right->value;
 	this->return_value=this->result>0 ? true:false;
 	//cout << this->left->value << " > " << this->right->value << " ---> " << this->return_value << endl;

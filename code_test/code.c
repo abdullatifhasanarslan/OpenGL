@@ -15,9 +15,9 @@ int factorial(int i){
 int main(){
 	int i;
 	int temp;
-	int array[5];
+	int array[10];
 	i=0;
-	while(i<5){
+	while(i<10){
 		temp=factorial(i);
 		if(i%2)
 		{

@@ -17,7 +17,6 @@ Function::Function(){
 }
 
 Function::~Function(){
-
 }
 
 //---------------------------------------------------------
@@ -36,6 +35,7 @@ Command::~Command(){
 	if(this->func!=NULL){
 		delete this->func;
 	}
+
 }
 
 void Command::display(int x, int y){
@@ -221,7 +221,7 @@ void PipeLine::skip(int level){
 	//skip current command and open_bracket
 	//this->current+=2;
 	++this->current;
-	while(this->commands[this->current]->get_type()!=CLOSE_SCOPE && this->commands[this->current]->get_type()!=CLOSE_LOOP_SCOPE){
+	while((this->commands[this->current]->get_type()!=CLOSE_SCOPE && this->commands[this->current]->get_type()!=CLOSE_LOOP_SCOPE) || this->commands[this->current]->get_level()>level+1){
 		this->commands[this->current]->disable();
 		++this->current;
 	}
@@ -284,11 +284,14 @@ void PipeLine::step(){
 
 			return;
 		} else {
-			cout<<"Program should be terminated but restarts instead"<<endl;
+			RenderString(500,500,"Program should be terminated but restarts instead");
+			cout << "Program should be terminated but restarts instead" << endl;
 			this->current=0;
 			for(int i=0;i<!this->commands.size();i++){
 				this->commands[this->current]->activate();
 			}
+			glutPostRedisplay();
+			glFlush();
 		}
 	}
 

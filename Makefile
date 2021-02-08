@@ -1,5 +1,5 @@
 
-deneme:	deneme.o events.o Variables.o Functions.o all_functions.o user_defined.hpp
+deneme: user_defined deneme.o events.o Variables.o Functions.o all_functions.o 
 	g++ deneme.o events.o Variables.o Functions.o all_functions.o -lGL -lGLU -lglut -lm -o deneme
 # deneme:	deneme.o events.o utility.o Variables.o Functions.o all_functions.o
 # 	g++ deneme.o events.o Variables.o Functions.o all_functions.o -lGL -lGLU -lglut -lm -o deneme
@@ -19,11 +19,15 @@ Functions.o:	Functions.h Functions.cpp
 all_functions.o: 	all_functions.h all_functions.cpp
 	g++ -std=c++11 all_functions.h all_functions.cpp -Wall -Werror -c
 
+compiler: compiler.cpp code.c
+	g++ -std=c++11 compiler.cpp -o compiler
 
-compiler: code_test/compiler.cpp
-	cd code_test
-	g++ compiler.cpp -o compiler
+coder: coder.cpp sample_result.json
+	g++ -std=c++11 coder.cpp -o coder
+
+user_defined: coder compiler
 	./compiler
+	./coder
 
 clean:
-	rm *.o *.gch deneme
+	rm *.o *.gch deneme compiler coder user_defined.hpp
