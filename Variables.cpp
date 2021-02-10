@@ -435,11 +435,13 @@ Array<Type>::~Array(){
 	delete[] this->value;
 }
 template class Variable<char>;
-template class Variable<double>;
 template class Variable<float>;
 template class Variable<int>;
-template class Variable<bool>;
+// template class Variable<double>;
+// template class Array<double>;
 template class Array<int>;
+template class Array<float>;
+template class Array<char>;
 //template class Variable<void*>;
 
 //---------------------------------------------------------------------------------------

@@ -1,12 +1,8 @@
 
-deneme: user_defined deneme.o events.o Variables.o Functions.o all_functions.o 
+deneme: deneme.o events.o Variables.o Functions.o all_functions.o 
 	g++ deneme.o events.o Variables.o Functions.o all_functions.o -lGL -lGLU -lglut -lm -o deneme
-# deneme:	deneme.o events.o utility.o Variables.o Functions.o all_functions.o
-# 	g++ deneme.o events.o Variables.o Functions.o all_functions.o -lGL -lGLU -lglut -lm -o deneme
-# utility.o: 	utility.h utility.cpp
-# 	g++ utility.h utility.cpp -Wall -Werror -c 
 
-deneme.o: 	deneme.cpp models.h Variables.h
+deneme.o: user_defined deneme.cpp models.h Variables.h
 	g++ -std=c++11 deneme.cpp models.h Variables.h -Wall -Werror -c
 events.o: 	events.h events.cpp Variables.h
 	g++ -std=c++11 events.h events.cpp Variables.h -Wall -Werror -c 
@@ -30,4 +26,4 @@ user_defined: coder compiler
 	./coder
 
 clean:
-	rm *.o *.gch deneme compiler coder user_defined.hpp
+	rm *.o *.gch deneme compiler coder

@@ -18,23 +18,24 @@ class assignment : public Function{
 		Type* right;
 };
 
+template <class Type>
 class array_assignment : public Function{
 	public:
-		array_assignment(Array<int>* array, Variable<int>* index, Variable<int>* right);	
+		array_assignment(Array<Type>* array, Variable<int>* index, Variable<Type>* right);	
 		~array_assignment(){}
 		void display(int x, int y);
 		void implement();
 
 	private:
-		Array<int>* array;
+		Array<Type>* array;
 		Variable<int>* index;
-		Variable<int>* right;
+		Variable<Type>* right;
 };
 
-template <class Type, class Type2>
+template <class Type>
 class lessthan : public Function{
 	public:
-		lessthan(Type* left, Type2* right);	
+		lessthan(Type* left, Type* right);	
 		~lessthan(){}
 		void display(int x, int y);
 		void implement();
@@ -44,17 +45,73 @@ class lessthan : public Function{
 		Type* right;
 };
 
-template <class Type, class Type2>
+template <class Type>
 class greaterthan : public Function{
 	public:
-		greaterthan(Type* left, Type2* right);	
+		greaterthan(Type* left, Type* right);	
 		~greaterthan(){}
 		void display(int x, int y);
 		void implement();
 		
 	private:
 		Type* left;
-		Type2* right;
+		Type* right;
+};
+
+template <class Type>
+class addition : public Function{
+	public:
+		addition(Type* left, Type* a, Type* b);	
+		~addition(){}
+		void display(int x, int y);
+		void implement();
+		
+	private:
+		Type* left;
+		Type* a;
+		Type* b;
+};
+
+template <class Type>
+class subtraction : public Function{
+	public:
+		subtraction(Type* left, Type* a, Type* b);	
+		~subtraction(){}
+		void display(int x, int y);
+		void implement();
+		
+	private:
+		Type* left;
+		Type* a;
+		Type* b;
+};
+
+template <class Type>
+class multiplication : public Function{
+	public:
+		multiplication(Type* left, Type* a, Type* b);	
+		~multiplication(){}
+		void display(int x, int y);
+		void implement();
+		
+	private:
+		Type* left;
+		Type* a;
+		Type* b;
+};
+
+template <class Type>
+class division : public Function{
+	public:
+		division(Type* left, Type* a, Type* b);	
+		~division(){}
+		void display(int x, int y);
+		void implement();
+		
+	private:
+		Type* left;
+		Type* a;
+		Type* b;
 };
 
 template <class Type>
@@ -70,17 +127,17 @@ class returner : public Function{
 		Type* right;
 };
 
-template <class Type,class Type2>
+template <class Type>
 class multiply_and_assign : public Function{
 	public:
-		multiply_and_assign(Type* left, Type2* right);	
+		multiply_and_assign(Type* left, Type* right);	
 		~multiply_and_assign(){}
 		void display(int x, int y);
 		void implement();
 		
 	private:
 		Type* left;
-		Type2* right;
+		Type* right;
 };
 
 

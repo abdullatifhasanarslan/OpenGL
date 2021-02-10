@@ -244,6 +244,7 @@ void PipeLine::disable_else(int level){
 void PipeLine::step(){
 	//This is just following step by step The most annoying part maybe
 	this->commands[this->current]->implement(); //if it is conditional <active> should be determined inside
+
 	switch( this->commands[this->current]->get_type() ){
 		case IF:
 		case ELSE_IF:

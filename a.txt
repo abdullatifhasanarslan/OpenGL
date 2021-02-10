@@ -12,13 +12,3 @@ loops will be reworked
 
 COMPILER
 
-
-
-Well I forgot to commit one part. 
-Now I seperated heap, global, and stack
-Now I have a pipeline which is active for only normal and doesn't actually
-implement commands. Now those commands should be an actual thing.
-
-Also I have to figure out fonts. Because now there should write something so
-it can actually look cool and worthful :D
-

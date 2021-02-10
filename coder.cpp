@@ -55,7 +55,7 @@ int main(){
 		output << "class " << it.key() << " : public Function {" << endl;
 		output << "\tpublic:" << endl;
 
-		//variables
+		//variable
 		//parameter
 		for (int j = 0; j < function_parameters.size();++j) {
 			json parameter = function_parameters.at(j);
@@ -63,20 +63,26 @@ int main(){
 		}
 		//others
 		for (json::iterator it2 = function_variables.begin(); it2 != function_variables.end();++it2) {
-			output << "\t\tVariable<" << (*it2)["type"].get<string>() << ">* " << it2.key() << ";" << endl;
+			if((*it2)["type"].get<string>()=="array"){
+				output << "\t\tArray<" << (*it2)["value_type"].get<string>() << ">* " << it2.key() << "_[" << (*it2)["size"].get<string>() << "];" << endl;
+			}else{
+				output << "\t\tVariable<" << (*it2)["type"].get<string>() << ">* " << it2.key() << ";" << endl;
+			}
 		}
 
 		//constructor----------------------
 		//parameters
 		output << "\t\t" << it.key() << "(";
 		int j;
-		for (j = 0; j < function_parameters.size()-1;++j) {
-			json parameter = function_parameters.at(j);
-			output << "Variable<" << parameter["type"].get<string>() << ">* ";
-			output << parameter["name"].get<string>() << ",";
+		if(function_parameters.size()>0){
+			for (j = 0; j < function_parameters.size()-1;++j) {
+				json parameter = function_parameters.at(j);
+				output << "Variable<" << parameter["type"].get<string>() << ">* ";
+				output << parameter["name"].get<string>() << ",";
+			}
+			output << "Variable<" << function_parameters.at(j)["type"].get<string>() << ">* ";
+			output << function_parameters.at(j)["name"].get<string>();
 		}
-		output << "Variable<" << function_parameters.at(j)["type"].get<string>() << ">* ";
-		output << function_parameters.at(j)["name"].get<string>();
 		output << "){" << endl;
 		//assignment
 		for (j = 0; j < function_parameters.size();++j) {
@@ -104,11 +110,17 @@ int main(){
 			}
 		}
 		for (json::iterator it2 = function_variables.begin(); it2 != function_variables.end();++it2) {
-			output << "\t\t\tVariable<" << (*it2)["type"].get<string>() << ">* " << it2.key() << "= new Variable<" << (*it2)["type"].get<string>() << ">(\"" << it2.key() << "\"";
-			if((*it2).find("value") != (*it2).end()){
-				output << "," << (*it2)["value"].get<string>();
+			if((*it2)["type"].get<string>()=="array"){
+				// output << "\t//" << (*it)["value_type"].get<string>() << " " << it.key() << "[" << (*it)["size"].get<string>() << "];" << endl;
+				output << "\t" << (*it2)["value_type"].get<string>() << " " << it2.key() << "_[" << (*it2)["size"].get<string>() << "];" << endl;
+				output << "\tArray<" << (*it2)["value_type"].get<string>() << ">* " << it2.key() << "=new Array<" << (*it2)["value_type"].get<string>() << ">(\"" << it2.key() << "\"," << it2.key() << "_," << (*it2)["size"].get<string>() << ");" << endl;
+			}else{
+				output << "\t\t\tVariable<" << (*it2)["type"].get<string>() << ">* " << it2.key() << "= new Variable<" << (*it2)["type"].get<string>() << ">(\"" << it2.key() << "\"";
+				if((*it2).find("value") != (*it2).end()){
+					output << "," << (*it2)["value"].get<string>();
+				}
+				output << ");" << endl;
 			}
-			output << ");" << endl;
 			output << "\t\t\tNameSpace::active_stack->add_Variable(" << it2.key() << ");"<< endl;
 		}
 		// output << "\t\t\tint depth=0;" << endl;
@@ -118,7 +130,7 @@ int main(){
 
 		//commands
 		for (j = 0; j < function_commands.size();++j) {
-			output << "\t\t\t//" << function_commands.at(j)["text"].get<string>() << endl;
+			// output << "\t\t\t//" << function_commands.at(j)["text"].get<string>() << endl;
 			output << "\t\t\tPipeLine::active_pipeline->add_Command( new Command(" << function_commands.at(j)["depth"].get<string>() << "," << function_commands.at(j)["type"].get<string>() << "," << function_commands.at(j)["text"];
 			
 			json command_function = function_commands.at(j);
@@ -170,14 +182,14 @@ int main(){
 	for (json::iterator it = main_variables.begin(); it != main_variables.end(); ++it) {
 		string type = (*it)["type"].get<string>();
 		if(type.compare("array")==0){
-			output << "\t//" << (*it)["value_type"].get<string>() << " " << it.key() << "[" << (*it)["size"].get<string>() << "];" << endl;
+			// output << "\t//" << (*it)["value_type"].get<string>() << " " << it.key() << "[" << (*it)["size"].get<string>() << "];" << endl;
 			output << "\t" << (*it)["value_type"].get<string>() << " " << it.key() << "_[" << (*it)["size"].get<string>() << "];" << endl;
 			output << "\tArray<" << (*it)["value_type"].get<string>() << ">* " << it.key() << "=new Array<" << (*it)["value_type"].get<string>() << ">(\"" << it.key() << "\"," << it.key() << "_," << (*it)["size"].get<string>() << ");" << endl;
 		}else if((*it).find("value") != (*it).end()){
-			output << "\t//" << (*it)["type"].get<string>() << " " << it.key() << "=" << (*it)["value"].get<string>() << ";" << endl;
+			// output << "\t//" << (*it)["type"].get<string>() << " " << it.key() << "=" << (*it)["value"].get<string>() << ";" << endl;
 			output << "\tVariable<" << (*it)["type"].get<string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<string>() << ">(\"" << it.key() << "\"," << (*it)["value"].get<string>() << ");" << endl;
 		}else{
-			output << "\t//" << (*it)["type"].get<string>() << " " << it.key() << ";" << endl;	
+			// output << "\t//" << (*it)["type"].get<string>() << " " << it.key() << ";" << endl;	
 			output << "\tVariable<" << (*it)["type"].get<string>() << ">* " << it.key() << "=new Variable<" << (*it)["type"].get<string>() << ">(\"" << it.key() << "\");" << endl;
 		}
 		output << "\tNameSpace::active_stack->add_Variable(" << it.key() << ");" << endl;
