@@ -1,3 +1,9 @@
+#ifdef _WIN32
+#include <windows.h>
+#endif
+#ifdef _WIN64
+#include <windows.h>
+#endif
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <math.h>
