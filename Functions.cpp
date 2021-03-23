@@ -10,6 +10,46 @@ extern int Width;
 extern int Height;
 extern void RenderString(int x, int y, const std::string &string, void* font=GLUT_BITMAP_TIMES_ROMAN_24);
 
+struct Ball{
+    int x, y;
+};
+struct Ball Robin={625,225};
+
+void BallDisplay(Command* active, int x, int y){
+    glPushMatrix();
+        glColor3f( 0.40000f, 0.0f, 0.0f );
+        glBegin(GL_POLYGON);
+            switch(active->get_type()){
+                case NORMAL:
+                case WHILE:
+                case IF:
+                case ELSE:
+                case ELSE_IF:
+                    x-=30;y-=10;
+                    glVertex2d(x,y);
+                    glVertex2d(x+25,y);
+                    glVertex2d(x+25,y+25);
+                    glVertex2d(x,y+25);
+                    break;
+                case OPEN_SCOPE:
+                    x-=45;y-=25;
+                    glVertex2d(x,y);
+                    glVertex2d(x+25,y);
+                    glVertex2d(x+25,y+25);
+                    glVertex2d(x,y+25);
+                    break;
+                case CLOSE_SCOPE:
+                case CLOSE_LOOP_SCOPE:
+                    x-=45;
+                    glVertex2d(x,y);
+                    glVertex2d(x+25,y);
+                    glVertex2d(x+25,y+25);
+                    glVertex2d(x,y+25);
+                    break;
+            }
+        glEnd();
+    glPopMatrix();
+}
 
 //---------------------------------------------------------
 
@@ -52,7 +92,7 @@ void Command::display(int x, int y){
 		glEnable(GL_LINE_STIPPLE);
 		glLineWidth(1.0);
 
-			
+
 		for(int i=0;i<this->level;i++){
 			//left
 			glLineStipple(1, 0xFFFF);
@@ -124,6 +164,10 @@ void Command::display(int x, int y){
 		}
 		string text = this->name;
 		RenderString(x,Height-(y+24),text);
+
+		if(this->is_current){
+            BallDisplay(this, x, Height-(y+24));
+		}
 		glDisable(GL_LINE_STIPPLE);
 	glPopMatrix();
 }
@@ -142,7 +186,7 @@ void Command::implement(){
 	}
 	this->is_current=false;
 	this->executed=true;
-	
+
 }
 
 int Command::get_type(){
@@ -225,7 +269,7 @@ void PipeLine::skip(int level){
 		this->commands[this->current]->disable();
 		++this->current;
 	}
-	this->commands[this->current]->disable();	
+	this->commands[this->current]->disable();
 	//step will skip close bracket
 }
 
@@ -233,18 +277,17 @@ void PipeLine::disable_else(int level){
 	int i=this->current+1;
 	while(this->commands[i]->get_level() != level ){
 		i++;
-	} 
+	}
 	while(this->commands[i]->get_level() != level  || this->commands[i]->get_type() == ELSE_IF || this->commands[i]->get_type() == ELSE){
 		this->commands[i]->disable();
 		i++;
 	}
-	
+
 }
 
 void PipeLine::step(){
 	//This is just following step by step The most annoying part maybe
 	this->commands[this->current]->implement(); //if it is conditional <active> should be determined inside
-
 	switch( this->commands[this->current]->get_type() ){
 		case IF:
 		case ELSE_IF:
@@ -269,7 +312,7 @@ void PipeLine::step(){
 	}
 
 	while(++this->current!=this->commands.size() && !this->commands[this->current]->is_active());
-	
+
 	if(this->current==this->commands.size()){
 		if(this->parent!=NULL){
 
@@ -277,9 +320,9 @@ void PipeLine::step(){
 			NameSpace::active_stack=NameSpace::active_stack->get_parent();
 			delete temp2;
 
-	
+
 			PipeLine* temp = this;
-			
+
 			PipeLine::active_pipeline=this->parent;
 			delete temp;
 
